@@ -12,6 +12,8 @@ import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { AddDeeplinkComponent } from './components/add-deeplink/add-deeplink.component';
 import { ShowDeeplinkComponent } from './components/show-deeplink/show-deeplink.component';
 import { FieldComponent } from './components/add-deeplink/field/field.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+
 
 
 @NgModule({
@@ -22,7 +24,8 @@ import { FieldComponent } from './components/add-deeplink/field/field.component'
     SignUpComponent,
     AddDeeplinkComponent,
     ShowDeeplinkComponent,
-    FieldComponent
+    FieldComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,

@@ -8,17 +8,21 @@ import { ShowDeeplinkComponent } from './components/show-deeplink/show-deeplink.
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 
 import { AuthGuard } from "./shared/auth.guard";
+import { DashboardComponent } from 'src/app/components/dashboard/dashboard.component';
+
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'login', component: SignInComponent },
   { path: 'signup', component: SignUpComponent },
-  { path: 'user-profile', component: UserProfileComponent, canActivate: [AuthGuard],
+  { path: 'dashboard', redirectTo: 'dashboard/user-profile', pathMatch: 'full' },
+  { path: 'dashboard', component: DashboardComponent, 
   children:[
     { path: 'add-deeplink', component: AddDeeplinkComponent },
+    { path: 'user-profile', component: UserProfileComponent , canActivate: [AuthGuard]},
     { path: 'show-deeplink', component: ShowDeeplinkComponent }
   ]
-  }];
+  } ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
