@@ -1,0 +1,71 @@
+h1{
+    background: #43cea2;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to left, #185a9d, #43cea2);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to left, #185a9d, #43cea2);
+    color: #fff;
+}
+
+.table td {
+    padding: 0.01rem; 
+   vertical-align: top;
+   border-top: 1px solid #dee2e6;
+}
+
+.txtarea-form-control {
+    display: block;
+    width: 100%;
+    height: 100px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+.toolbar-item{
+  /*   left :300px; */
+position: relative;
+}
+
+table {
+    width:200%;
+  }
+  
+  .mat-form-field {
+    font-size: 14px;
+    width: 50%;
+  }
+  
+  .mat-column-position {
+    max-width: 100px;
+  }
+  
+  .mat-column-name {
+    max-width: 100px;
+  }
+
+
+ 
+th.mat-header-cell {
+    text-align: left;
+    max-width: 300px;
+}
+
+
+.header {
+  padding: 5px;
+}
+
+.filter {
+  display: block;
+  /* width: 5%; */
+}
+
+
