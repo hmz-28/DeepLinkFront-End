@@ -22,18 +22,17 @@
             "assets": [
               "src/favicon.ico",
               "src/assets"
-              
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css",
               "node_modules/bootstrap/dist/css/bootstrap.css",
               "src/styles.css"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
-               "node_modules/bootstrap/dist/js/bootstrap.min.js",
-               "src/assets/js/scripts.js",
-               "src/assets/js/bootstrap-datetimepicker.min.js"        
-              ]
+              "node_modules/bootstrap/dist/js/bootstrap.min.js",
+              "src/assets/js/scripts.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -95,6 +94,7 @@
               "src/assets"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css",
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.css"
             ],
@@ -127,6 +127,7 @@
           }
         }
       }
-    }},
+    }
+  },
   "defaultProject": "DeepLinkFront-End"
 }

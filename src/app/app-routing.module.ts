@@ -18,7 +18,7 @@ const routes: Routes = [
   { path: 'dashboard', redirectTo: 'dashboard/user-profile', pathMatch: 'full' },
   { path: 'dashboard', component: DashboardComponent, 
   children:[
-    { path: 'add-deeplink', component: AddDeeplinkComponent },
+    { path: 'add-deeplink', component: AddDeeplinkComponent},
     { path: 'user-profile', component: UserProfileComponent , canActivate: [AuthGuard]},
     { path: 'show-deeplink', component: ShowDeeplinkComponent }
   ]
