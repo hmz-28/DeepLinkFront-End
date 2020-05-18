@@ -1,11 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, FormArray, Validators } from '@angular/forms';
-import { Field } from './../../shared/field.interface';
+import {Component, OnInit} from '@angular/core';
+import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import links from './../../shared/links.json';
-import { LinkService } from './../../services/link.service';
-import { merge, combineLatest, Subject } from 'rxjs';
-import { AuthService } from './../../shared/auth.service';
-import { User } from './../../model/user';
+import {LinkService} from './../../services/link.service';
+import {Subject} from 'rxjs';
+import {AuthService} from '../../services/auth.service';
+import {User} from './../../model/user';
 
 const cleanTheData = data =>
   data
@@ -33,29 +32,30 @@ export class AddDeeplinkComponent implements OnInit {
   formattedMessage: String;
   dataSource: Array<any> = links;
   currentUser: User = {
-    _id:"1", 
-    name:"Tom", 
-    company:"Smartech" ,
-    email:"",
-    password:"",
-    profile:"Administrateur"
- }; 
+    id: "1",
+    name: "Tom",
+    company: "Smartech",
+    email: "",
+    password: "",
+    profile: "Administrateur",
+    token:""
+  };
 
   dataSet = cleanTheData(this.dataSource);
 
-  constructor(private fb: FormBuilder, private linkService: LinkService, private authService:AuthService) {
-    
+  constructor(private fb: FormBuilder, private linkService: LinkService, private authService: AuthService) {
+
   }
 
   ngOnInit(): void {
 
     if (this.linkService.dataRow != null) {
-     
+
       this.userTable = this.fb.group({
         tableRows: this.fb.array([]),
         linkname: [this.linkService.dataRow.name, [Validators.required]],
         linkprefix: [''],
-        linkdescription: [this.linkService.dataRow.description, [Validators.required, Validators.maxLength(100)]],
+        description: [this.linkService.dataRow.description],// [Validators.required, Validators.maxLength(100)]
         customer: [this.linkService.dataRow.customer],
         environment: [this.linkService.dataRow.environment],
         editedby: [this.currentUser.name],
@@ -77,47 +77,40 @@ export class AddDeeplinkComponent implements OnInit {
         });
         control.push(row);
       }.bind(this));
-      this.isSubmit=false;
-      this.linkService.dataRow=null;
+      this.isSubmit = false;
+      this.linkService.dataRow = null;
       //this.userTable.invalid==true;
-     
+
     } else {
-    
+
       this.touchedRows = [];
       this.userTable = this.fb.group({
         tableRows: this.fb.array([]),
         linkname: ['', [Validators.required]],
         linkprefix: [''],
-        linkdescription: ['', [Validators.required, Validators.maxLength(100)]],
+        description: ['', [Validators.required]],
         customer: [''],
         environment: [''],
-        editedby: [''],
+        editedby: [this.currentUser.name],
         modificationdate: [new Date()],
         profile: [''],
         status: ['']
       });
-      
+
       //this.userTable.invalid==true;
       this.updateEditCache();
-      this.isSubmit=true;
+      this.isSubmit = true;
     }
   }
 
   updateEditCache(): void {
     this.dataSet.forEach(item => {
-      /*   if (!this.editCache[item.key]) {
-          this.editCache[item.key] = {
-            edit: false,
-            data: item
-          };
-        } */
+
       const control = this.userTable.get('tableRows') as FormArray;
       const row = this.fb.group({
         name: [item.name],
         value: [item.value],
-        /*   dob: ['', [Validators.required]],
-          bloodGroup: [''],
-          mobNumber: ['', [Validators.required, Validators.maxLength(10)]], */
+
         isEditable: [false]
       });
       //  console.log( control)
@@ -133,7 +126,6 @@ export class AddDeeplinkComponent implements OnInit {
     console.log(parsedJson);
     // this.userTable.reset();
   }
-
 
 
   ngAfterOnInit() {
@@ -192,14 +184,12 @@ export class AddDeeplinkComponent implements OnInit {
     var parsedArray = control.controls;
     var mapping: String;
     parsedArray.forEach(function (group) {
-     // console.log(group.get('name').value + '=' + group.get('value').value);
+      // console.log(group.get('name').value + '=' + group.get('value').value);
       mapping += group.get('name').value + '=' + group.get('value').value + '&';
 
     }.bind(this));
-    /*   for (var item in control.controls) {
-        
-      } */
-    console.log(mapping);
+
+    // console.log(mapping);
     this.ngOnInit();
   }
 

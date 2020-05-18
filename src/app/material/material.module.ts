@@ -13,9 +13,14 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatDialogModule } from '@angular/material/dialog';
-import {  MatDatepickerModule } from '@angular/material/datepicker';
-import {  MatNativeDateModule } from '@angular/material/core';
-import {  MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
+import {TooltipPosition} from '@angular/material/tooltip';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import {MatSnackBarModule} from "@angular/material/snack-bar";
+
 
 @NgModule({
   declarations: [],
@@ -32,11 +37,14 @@ import {  MatSelectModule } from '@angular/material/select';
     MatSortModule,
     MatFormFieldModule,
     MatInputModule,
-    MatPaginatorModule, 
+    MatPaginatorModule,
     MatDialogModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatSelectModule
+    MatSelectModule,
+    BrowserAnimationsModule,
+    MatTooltipModule,
+    MatSnackBarModule
   ],
   exports: [
     MatTabsModule,
@@ -50,11 +58,14 @@ import {  MatSelectModule } from '@angular/material/select';
     MatSortModule,
     MatFormFieldModule,
     MatInputModule,
-    MatPaginatorModule, 
+    MatPaginatorModule,
     MatDialogModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatSelectModule
+    MatSelectModule,
+    BrowserAnimationsModule,
+    MatTooltipModule,
+    MatSnackBarModule
   ]
 })
 export class MaterialModule { }

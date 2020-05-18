@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-import { AuthService } from './../../shared/auth.service';
+import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -35,15 +35,7 @@ export class SignUpComponent implements OnInit {
     public authService: AuthService,
     public router: Router
   ) {
-/*     this.signupForm = this.fb.group({
-      name: ['',[Validators.required]],
-      email: ['',[Validators.required, Validators.email]],
-      company: [''],
-      password: ['',[Validators.required,Validators.minLength(6)]],
-      confirm_password: ['',[Validators.required]]
-    }, { 
-    //  validator: this.password.bind(this)
-    }) */
+
     this.signupForm = this.fb.group({
       username: new FormControl('', Validators.compose([
         Validators.required
@@ -63,20 +55,20 @@ export class SignUpComponent implements OnInit {
         Validators.minLength(6),
         Validators.maxLength(30)
       ])),
-    }, { 
+    }, {
       validators: this.password.bind(this)
     });
   }
   ngOnInit(): void {
   }
   registerUser() {
-  
-    /* this.authService.signUp(this.signupForm.value).subscribe((res) => {
+
+     this.authService.signUp(this.signupForm.value).subscribe((res) => {
       if (res.result) {
         this.signupForm.reset()
         this.router.navigate(['login']);
       }
-    }) */
+    })
   }
 
 password(formGroup: FormGroup) {

@@ -1,25 +1,27 @@
-import { Injectable } from '@angular/core';
-import { User } from './../model/user';
-import { Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { Router } from '@angular/router';
+import {Injectable} from '@angular/core';
+import {User} from '../model/user';
+import {Observable, throwError} from 'rxjs';
+import {catchError, map} from 'rxjs/operators';
+import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
+import {Router} from '@angular/router';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  endpoint: string = 'http://localhost:8080/deeplink';
+  endpoint: string = 'http://localhost:8080/api/token';
   headers = new HttpHeaders().set('Content-Type', 'application/json');
   currentUser = new User;
 
-  constructor(   private http:HttpClient,
-    public router:Router) {}
+  constructor(private http: HttpClient,
+              public router: Router, private snackBar: MatSnackBar) {
+  }
 
-    // Sign-up
+  // Sign-up
   signUp(user: User): Observable<any> {
-    let api = `${this.endpoint}/register-user`;
-    return this.http.post(api, user)
+    let api = `${this.endpoint}/signup`;
+    return this.http.post(api, user, {headers: this.headers})
       .pipe(
         catchError(this.handleError)
       )
@@ -27,12 +29,16 @@ export class AuthService {
 
   // Sign-in
   signIn(user: User) {
-    return this.http.post<any>(`${this.endpoint}/signin`, user)
+    console.log(JSON.stringify(user));
+    return this.http.post(`${this.endpoint}/generate-token`, user, {headers: this.headers})
       .subscribe((res: any) => {
-        localStorage.setItem('access_token', res.token)
-        this.getUserProfile(res._id).subscribe((res) => {
+
+        this.openSnackBar("User Logged In", "")
+        localStorage.setItem('access_token', res.result.token)
+        this.getUserProfile(res.id).subscribe((res) => {
           this.currentUser = res;
-          this.router.navigate(['dashboard/' + res.msg._id]);
+          console.log(res);
+          this.router.navigate(['dashboard']);
         })
       })
   }
@@ -46,17 +52,19 @@ export class AuthService {
     return (authToken !== null) ? true : false;
   }
 
+// logout
   doLogout() {
     let removeToken = localStorage.removeItem('access_token');
     if (removeToken == null) {
       this.router.navigate(['login']);
     }
+    //this.authService.isLoggedIn == true
   }
 
   // User profile
   getUserProfile(id): Observable<any> {
     let api = `${this.endpoint}/user-profile/${id}`;
-    return this.http.get(api, { headers: this.headers }).pipe(
+    return this.http.get(api, {headers: this.headers}).pipe(
       map((res: Response) => {
         return res || {}
       }),
@@ -64,7 +72,7 @@ export class AuthService {
     )
   }
 
-  // Error 
+  // Error
   handleError(error: HttpErrorResponse) {
     let msg = '';
     if (error.error instanceof ErrorEvent) {
@@ -75,5 +83,12 @@ export class AuthService {
       msg = `Error Code: ${error.status}\nMessage: ${error.message}`;
     }
     return throwError(msg);
+  }
+
+// use angualr material snack bar
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 2000,
+    });
   }
 }

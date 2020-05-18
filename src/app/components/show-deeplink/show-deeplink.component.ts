@@ -1,12 +1,13 @@
-import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { LinkService } from 'src/app/services/link.service';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { FormControl } from '@angular/forms';
-import { MatPaginator } from '@angular/material/paginator';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
+import {LinkService} from 'src/app/services/link.service';
+import {MatTableDataSource} from '@angular/material/table';
+import {FormControl} from '@angular/forms';
+import {MatPaginator} from '@angular/material/paginator';
+import {Router} from '@angular/router';
 import links from './../../shared/link_value.json';
-import { MatDialog } from '@angular/material/dialog';
-import { ConfirmationDialogComponent } from './../confirmation-dialog/confirmation-dialog.component';
+import {MatDialog} from '@angular/material/dialog';
+import {ConfirmationDialogComponent} from './../confirmation-dialog/confirmation-dialog.component';
+import {Link} from "../../model/link";
 
 @Component({
   selector: 'app-show-deeplink',
@@ -23,9 +24,8 @@ export class ShowDeeplinkComponent implements OnInit {
   rows = 5;
   links: any[] = links;
 
+  displayedColumns: string[] = ['name', 'description', 'customer', 'environment', 'editedby', 'modificationdate', 'profile', 'status', 'details', 'delete', 'Copy'];//'update',
 
-  displayedColumns: string[] = ['name', 'description', 'customer',
-    'environment', 'editedby', 'modificationdate', 'profile', 'status', 'details', 'delete', 'Copy'];//'update',
   dataSource = new MatTableDataSource(this.links);
   //expandedElement: linkElement | null;
   descFilter = new FormControl();
@@ -37,15 +37,19 @@ export class ShowDeeplinkComponent implements OnInit {
   profileFilter = new FormControl();
   statusFilter = new FormControl();
 
-/* 
-  globalFilter = '';
- */
-  filteredValues = { description: '', name: '', customer: '', environment: '',
-   editedby: '', modificationdate: ''   , profile: '', status: ''
+
+  filteredValues = {
+    description: '',
+    name: '',
+    customer: '',
+    environment: '',
+    editedby: '',
+    modificationdate: '',
+    profile: '',
+    status: ''
   };
-
-
   resultsLength = 0;
+
   constructor(private linkService: LinkService, private router: Router, private dialog: MatDialog, private cdRef: ChangeDetectorRef) {
 
     this.dataSource.data = this.links;
@@ -54,66 +58,13 @@ export class ShowDeeplinkComponent implements OnInit {
 
   ngOnInit(): void {
 
-   // create filter foreach column
-    this.nameFilter.valueChanges
-      .subscribe(
-      name => {
-        this.filteredValues.name = name;
-        this.dataSource.filter = JSON.stringify(this.filteredValues);
-      }
-      )
-    this.descFilter.valueChanges
-      .subscribe(
-      description => {
-        this.filteredValues.description = description;
-        this.dataSource.filter = JSON.stringify(this.filteredValues);
-      }
-      )
-    this.customerFilter.valueChanges
-      .subscribe(
-      customer => {
-        this.filteredValues.customer = customer;
-        this.dataSource.filter = JSON.stringify(this.filteredValues);
-      }
-      )
-    this.envFilter.valueChanges
-      .subscribe(
-      environment => {
-        this.filteredValues.environment = environment;
-        this.dataSource.filter = JSON.stringify(this.filteredValues);
-      }
-      )
-
-    this.editedbyFilter.valueChanges
-      .subscribe(
-      editedby => {
-        this.filteredValues.editedby = editedby;
-        this.dataSource.filter = JSON.stringify(this.filteredValues);
-      }
-      )
-    this.modDateFilter.valueChanges
-      .subscribe(
-      modificationdate => {
-        this.filteredValues.modificationdate = modificationdate;
-        this.dataSource.filter = JSON.stringify(this.filteredValues);
-      }
-      )
-    this.profileFilter.valueChanges
-      .subscribe(
-      profile => {
-        this.filteredValues.profile = profile;
-        this.dataSource.filter = JSON.stringify(this.filteredValues);
-      }
-      )
-
-    this.statusFilter.valueChanges
-      .subscribe(
-      status => {
-        this.filteredValues.status = status;
-        this.dataSource.filter = JSON.stringify(this.filteredValues);
-      }
-      )
+    this.applyFilter();
+    this.linkService.loadLinks().subscribe((data: Link[]) => {
+      console.log(data);
+      this.links = data;
+    })
   }
+
   ngAfterContentInit() {
     console.log("! changement de la date du composant !");
 
@@ -124,11 +75,6 @@ export class ShowDeeplinkComponent implements OnInit {
     //this.dataSource.sort = this.sort;
   }
 
-  /*  copyInputMessage(inputElement) {
-     //inputElement.select();
-     document.execCommand('copy');
-     //inputElement.setSelectionRange(0, 0);
-   } */
 
   /* To copy any Text */
   copyText(val: string) {
@@ -146,18 +92,11 @@ export class ShowDeeplinkComponent implements OnInit {
   }
 
 
-/* 
-  applyFilter(filter) {
-    this.globalFilter = filter;
-    this.dataSource.filter = JSON.stringify(this.filteredValues);
-  } */
-
-
   public redirectToDetails = (url: any, row) => {
     this.linkService.dataRow = row;
     this.router.navigate(['./dashboard/add-deeplink']);
     /*  this.router.navigateByUrl(url, { skipLocationChange: true }).then(() => {
-       
+
    });  */
   }
 
@@ -169,7 +108,7 @@ export class ShowDeeplinkComponent implements OnInit {
 
   public redirectToDelete = (id: string) => {
     //  this.dataSource.data.splice(ELEMENT_DATA.indexOf(element),1);
-    //  this.dataSource = new MatTableDataSource<PeriodicElement>(this.dataSource.data); 
+    //  this.dataSource = new MatTableDataSource<PeriodicElement>(this.dataSource.data);
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       width: '350px',
       data: "Do you confirm the deletion of this data?"
@@ -196,9 +135,74 @@ export class ShowDeeplinkComponent implements OnInit {
     }
     return filterFunction;
   }
+
+
+  applyFilter() {
+    /* this.globalFilter = filter;
+     this.dataSource.filter = JSON.stringify(this.filteredValues);*/
+    // create filter foreach column
+    this.nameFilter.valueChanges
+      .subscribe(
+        name => {
+          this.filteredValues.name = name;
+          this.dataSource.filter = JSON.stringify(this.filteredValues);
+        }
+      )
+    this.descFilter.valueChanges
+      .subscribe(
+        description => {
+          this.filteredValues.description = description;
+          this.dataSource.filter = JSON.stringify(this.filteredValues);
+        }
+      )
+    this.customerFilter.valueChanges
+      .subscribe(
+        customer => {
+          this.filteredValues.customer = customer;
+          this.dataSource.filter = JSON.stringify(this.filteredValues);
+        }
+      )
+    this.envFilter.valueChanges
+      .subscribe(
+        environment => {
+          this.filteredValues.environment = environment;
+          this.dataSource.filter = JSON.stringify(this.filteredValues);
+        }
+      )
+
+    this.editedbyFilter.valueChanges
+      .subscribe(
+        editedby => {
+          this.filteredValues.editedby = editedby;
+          this.dataSource.filter = JSON.stringify(this.filteredValues);
+        }
+      )
+    this.modDateFilter.valueChanges
+      .subscribe(
+        modificationdate => {
+          this.filteredValues.modificationdate = modificationdate;
+          this.dataSource.filter = JSON.stringify(this.filteredValues);
+        }
+      )
+    this.profileFilter.valueChanges
+      .subscribe(
+        profile => {
+          this.filteredValues.profile = profile;
+          this.dataSource.filter = JSON.stringify(this.filteredValues);
+        }
+      )
+
+    this.statusFilter.valueChanges
+      .subscribe(
+        status => {
+          this.filteredValues.status = status;
+          this.dataSource.filter = JSON.stringify(this.filteredValues);
+        }
+      )
+  }
 }
 
-/* 
+/*
 
 export interface linkElement {
   name: string;
