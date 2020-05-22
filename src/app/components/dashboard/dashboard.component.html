@@ -1,6 +1,5 @@
-
 <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
- 
+
 
 <mat-toolbar class="mat-elevation-z5">
   <button mat-button id="show-sidebar" class="btn btn-sm btn-dark">
@@ -14,38 +13,39 @@
   </button>
 </nav> -->
 <div class="page-wrapper chiller-theme toggled">
-  
+
   <div id="sidebar" class="sidebar-wrapper">
     <div class="sidebar-content">
-      <div class="sidebar-brand">
-        <a >Menu</a>
-        <div id="close-sidebar">
-          <i id="close-sidebar" class="fas fa-times"></i>
+      <div class="sidebar-brand" id="close-sidebar">
+        <a>Menu</a>
+        <div>
+          <i class="fas fa-times"></i>
         </div>
       </div>
       <div class="sidebar-header">
         <div class="user-pic">
-          <img class="img-responsive img-rounded" src="https://raw.githubusercontent.com/azouaoui-med/pro-sidebar-template/gh-pages/src/img/user.jpg"
-            alt="User picture">
+          <img class="img-responsive img-rounded"
+               src="https://raw.githubusercontent.com/azouaoui-med/pro-sidebar-template/gh-pages/src/img/user.jpg"
+               alt="User picture">
         </div>
         <div class="user-info">
           <span class="user-name">
             <strong>  {{this.currentUser.name}}</strong>
           </span>
           <span class="user-role">  {{this.currentUser.profile}}</span>
-       
+
         </div>
       </div>
       <!-- sidebar-header  -->
-  <!--     <div class="sidebar-search">
-        <div>
-           <a routerLink="./add-deeplink">
-              <i class="fa fa-gem"></i>
-              <span>Profile</span>
-              <span class="badge badge-pill badge-warning">New</span> 
-            </a>
-        </div>
-      </div>  -->
+      <!--     <div class="sidebar-search">
+            <div>
+               <a routerLink="./add-deeplink">
+                  <i class="fa fa-gem"></i>
+                  <span>Profile</span>
+                  <span class="badge badge-pill badge-warning">New</span>
+                </a>
+            </div>
+          </div>  -->
       <!-- sidebar-search  -->
       <div class="sidebar-menu">
         <ul>
@@ -53,30 +53,30 @@
             <a routerLink="./user-profile">
               <i class="fa fa-user"></i>
               <span>Profile</span>
-             <!--  <span class="badge badge-pill badge-warning">New</span> -->
+              <!--  <span class="badge badge-pill badge-warning">New</span> -->
             </a>
-    
+
           </li>
           <li class="sidebar-dropdown">
             <a routerLink="./add-deeplink">
               <i class="fa fa-gem"></i>
               <span>Generate DeepLink</span>
-             <!--  <span class="badge badge-pill badge-warning">New</span> -->
+              <!--  <span class="badge badge-pill badge-warning">New</span> -->
             </a>
-    
+
           </li>
           <li class="sidebar-dropdown">
-            <a routerLink="./show-deeplink" >
+            <a routerLink="./show-deeplink">
               <i class="fa fa-shopping-cart"></i>
               <span>Show DeepLink</span>
-            <!--   <span class="badge badge-pill badge-danger">3</span> -->
+              <!--   <span class="badge badge-pill badge-danger">3</span> -->
             </a>
-   
-		  </li>
-		  <li><a routerLink="/login" >
+
+          </li>
+          <li><a style="cursor:pointer;"><!--//routerLink="/login"-->
             <span class="nav-icon"><i class="fa fa-power-off" aria-hidden="true"></i></span>
-            <span class="remove_text">Logout</span> </a></li>
-       
+            <span class="remove_text" (click)="signOut()">Logout</span> </a></li>
+
         </ul>
       </div>
       <!-- sidebar-menu  -->
@@ -86,7 +86,7 @@
   <!-- sidebar-wrapper  -->
   <main class="page-content">
     <div class="container-fluid">
-		<router-outlet></router-outlet>
+      <router-outlet></router-outlet>
     </div>
 
   </main>

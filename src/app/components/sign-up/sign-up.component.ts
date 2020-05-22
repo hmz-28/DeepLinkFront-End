@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {AuthService} from '../../services/auth.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-sign-up',
@@ -13,19 +13,19 @@ export class SignUpComponent implements OnInit {
   signupForm: FormGroup;
   error_messages = {
     'username': [
-      { type: 'required', message: 'User Name is required.' },
+      {type: 'required', message: 'User Name is required.'},
     ],
     'email': [
-      { type: 'required', message: 'Email is required.' },
-      { type: 'required', message: 'please enter a valid email address.' }
+      {type: 'required', message: 'Email is required.'},
+      {type: 'required', message: 'please enter a valid email address.'}
     ],
 
     'password': [
-      { type: 'required', message: 'password is required.' },
-      { type: 'minlength', message: 'Password must be at least 6 characters.' },
+      {type: 'required', message: 'password is required.'},
+      {type: 'minlength', message: 'Password must be at least 6 characters.'},
     ],
     'confirmpassword': [
-      { type: 'required', message: 'password is not mutch.' },
+      {type: 'required', message: 'password is not mutch.'},
     ],
   }
 
@@ -59,22 +59,25 @@ export class SignUpComponent implements OnInit {
       validators: this.password.bind(this)
     });
   }
+
   ngOnInit(): void {
   }
+
   registerUser() {
 
-     this.authService.signUp(this.signupForm.value).subscribe((res) => {
-      if (res.result) {
+    this.authService.signUp(this.signupForm.value).subscribe((res) => {
+      if (res) {
+        //this.openSnackBar("User credentials is wrong", "","red-snackbar");
         this.signupForm.reset()
         this.router.navigate(['login']);
       }
     })
   }
 
-password(formGroup: FormGroup) {
-  const { value: password } = formGroup.get('password');
-  const { value: confirmPassword } = formGroup.get('confirmpassword');
-  return password === confirmPassword ? null : { passwordNotMatch: true };
-}
+  password(formGroup: FormGroup) {
+    const {value: password} = formGroup.get('password');
+    const {value: confirmPassword} = formGroup.get('confirmpassword');
+    return password === confirmPassword ? null : {passwordNotMatch: true};
+  }
 
 }

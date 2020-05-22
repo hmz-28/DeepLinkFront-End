@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { MatTableModule } from '@angular/material/table';
 import { ShowDeeplinkComponent } from './show-deeplink.component';
 
 describe('ShowDeeplinkComponent', () => {
@@ -8,7 +8,8 @@ describe('ShowDeeplinkComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ShowDeeplinkComponent ]
+      declarations: [ ShowDeeplinkComponent ],
+      imports: [ MatTableModule ]
     })
     .compileComponents();
   }));

@@ -5,5 +5,5 @@ export class User {
   company: String;
   password: String;
   profile: String;
-  token: string
+  token: string;
 }

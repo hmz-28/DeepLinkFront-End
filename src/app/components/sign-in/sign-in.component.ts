@@ -36,9 +36,12 @@ export class SignInComponent implements OnInit {
 
   ngOnInit(): void {
   }
-  get form() { return this.signinForm.controls; }
-  loginUser() {
 
+  get form() {
+    return this.signinForm.controls;
+  }
+
+  loginUser() {
     this.authService.signIn(this.signinForm.value)
   }
 }

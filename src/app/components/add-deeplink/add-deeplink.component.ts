@@ -2,9 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import links from './../../shared/links.json';
 import {LinkService} from './../../services/link.service';
-import {Subject} from 'rxjs';
 import {AuthService} from '../../services/auth.service';
 import {User} from './../../model/user';
+import {Link} from "../../model/link";
 
 const cleanTheData = data =>
   data
@@ -28,55 +28,51 @@ export class AddDeeplinkComponent implements OnInit {
   control: FormArray;
   isSubmit: boolean;
   touchedRows: any;
-  customForm: Subject<any> = new Subject();
-  formattedMessage: String;
+  // customForm: Subject<any> = new Subject();
+  //formattedMessage: String;
   dataSource: Array<any> = links;
-  currentUser: User = {
-    id: "1",
-    name: "Tom",
-    company: "Smartech",
-    email: "",
-    password: "",
-    profile: "Administrateur",
-    token:""
-  };
+  currentUser: User;
 
   dataSet = cleanTheData(this.dataSource);
 
   constructor(private fb: FormBuilder, private linkService: LinkService, private authService: AuthService) {
-
+    this.currentUser = this.authService.currentUser;
   }
 
   ngOnInit(): void {
 
     if (this.linkService.dataRow != null) {
-
+      //console.log(this.linkService.dataRow);
       this.userTable = this.fb.group({
         tableRows: this.fb.array([]),
-        linkname: [this.linkService.dataRow.name, [Validators.required]],
+        id: [this.linkService.dataRow.id],
+        linkname: [this.linkService.dataRow.linkname, [Validators.required]],
         linkprefix: [''],
         description: [this.linkService.dataRow.description],// [Validators.required, Validators.maxLength(100)]
         customer: [this.linkService.dataRow.customer],
         environment: [this.linkService.dataRow.environment],
         editedby: [this.currentUser.name],
-        modificationdate: [new Date()],
+        modificationdate: [new Date(), [Validators.required]],
         profile: [''],
         status: ['']
       });
-      // console.log( this.userTable);
-      var splitted = this.linkService.dataRow.value.split("&");
-      // console.log(splitted)
-      splitted.forEach(function (value) {
-        var splitted_value = value.split("=");
-        const control = this.userTable.get('tableRows') as FormArray;
-        //  console.log(splitted_value[1])
-        const row = this.fb.group({
-          name: [splitted_value[0]],
-          value: [splitted_value[1]],
-          isEditable: [false]
-        });
-        control.push(row);
-      }.bind(this));
+      if (this.linkService.dataRow.linkvalue != undefined) {
+        var splitted = this.linkService.dataRow.linkvalue.replace('http://www.smartech-tn.com/launch?', '');
+        var newsplitted = splitted.split("&");
+       // console.log(newsplitted)
+        newsplitted.forEach(function (value) {
+          var splitted_value = value.split("=");
+          const control = this.userTable.get('tableRows') as FormArray;
+          //  console.log(splitted_value[1])
+          const row = this.fb.group({
+            name: [splitted_value[0]],
+            value: [splitted_value[1]],
+            isEditable: [false]
+          });
+          control.push(row);
+        }.bind(this));
+      }
+
       this.isSubmit = false;
       this.linkService.dataRow = null;
       //this.userTable.invalid==true;
@@ -86,13 +82,14 @@ export class AddDeeplinkComponent implements OnInit {
       this.touchedRows = [];
       this.userTable = this.fb.group({
         tableRows: this.fb.array([]),
+        //  id:[0],
         linkname: ['', [Validators.required]],
         linkprefix: [''],
-        description: ['', [Validators.required]],
+        description: [''],//, [Validators.required]
         customer: [''],
         environment: [''],
         editedby: [this.currentUser.name],
-        modificationdate: [new Date()],
+        modificationdate: [new Date(), [Validators.required]],
         profile: [''],
         status: ['']
       });
@@ -117,14 +114,6 @@ export class AddDeeplinkComponent implements OnInit {
       control.push(row);
 
     });
-  }
-
-  onSubmit() {
-    // console.log(this.getFormControls().controls)
-    const control = this.userTable.get('tableRows') as FormArray;
-    var parsedJson = JSON.stringify(this.userTable.get('tableRows')[0].controls);
-    console.log(parsedJson);
-    // this.userTable.reset();
   }
 
 
@@ -168,9 +157,6 @@ export class AddDeeplinkComponent implements OnInit {
     group.get('isEditable').setValue(false);
   }
 
-  saveUserDetails() {
-    //console.log(this.userTable.value);
-  }
 
   get getFormControls() {
     const control = this.userTable.get('tableRows') as FormArray;
@@ -178,23 +164,56 @@ export class AddDeeplinkComponent implements OnInit {
   }
 
   submitForm(form) {
+
     var control = form.get('tableRows') as FormArray;
     this.touchedRows = control.controls.filter(row => row.touched).map(row => row.value);
     //console.log(this.userTable.value);
     var parsedArray = control.controls;
-    var mapping: String;
+    var mapping: String = "";
     parsedArray.forEach(function (group) {
-      // console.log(group.get('name').value + '=' + group.get('value').value);
-      mapping += group.get('name').value + '=' + group.get('value').value + '&';
+      //    console.log(group.get('name').value + '=' + group.get('value').value);
+      if (group.get('name').value != "")
+        mapping += group.get('name').value + '=' + group.get('value').value + '&';
 
     }.bind(this));
+    var newMapping = mapping.substring(0, mapping.length - 1);
+    console.log(newMapping);
+    const newLink = new Link(0, form.get('linkname').value,  newMapping, form.get('customer').value,
+      form.get('environment').value, form.get('editedby').value, form.get('modificationdate').value,
+      form.get('status').value, form.get('description').value, form.get('profile').value);
 
-    // console.log(mapping);
+    //console.log(newLink);
+
+    let id = localStorage.getItem('currentUserid');
+
+    this.linkService.saveLink(newLink, Number(id)).subscribe(
+      res => {
+        //  console.log(res);
+      }
+    );
+
     this.ngOnInit();
   }
 
   public redirectToUpdate(form) {
-    //this.userForm.patchValue(item);
+    console.log(form.value);
 
+    var control = form.get('tableRows') as FormArray;
+    this.touchedRows = control.controls.filter(row => row.touched).map(row => row.value);
+    var parsedArray = control.controls;
+    var mapping: String;
+    parsedArray.forEach(function (group) {
+      mapping += group.get('name').value + '=' + group.get('value').value + '&';
+    }.bind(this));
+    const newLink = new Link(form.get('id').value, form.get('linkname').value, mapping, form.get('customer').value,
+      form.get('environment').value, form.get('editedby').value, form.get('modificationdate').value,
+      form.get('status').value, form.get('description').value, form.get('profile').value);
+    let id = localStorage.getItem('currentUserid');
+
+    this.linkService.updateLink(newLink, Number(id)).subscribe(
+      res => {
+        console.log(res);
+      }
+    );
   }
 }

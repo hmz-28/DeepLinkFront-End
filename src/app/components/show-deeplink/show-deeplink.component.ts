@@ -4,10 +4,11 @@ import {MatTableDataSource} from '@angular/material/table';
 import {FormControl} from '@angular/forms';
 import {MatPaginator} from '@angular/material/paginator';
 import {Router} from '@angular/router';
-import links from './../../shared/link_value.json';
 import {MatDialog} from '@angular/material/dialog';
 import {ConfirmationDialogComponent} from './../confirmation-dialog/confirmation-dialog.component';
 import {Link} from "../../model/link";
+import {AuthService} from "../../services/auth.service";
+
 
 @Component({
   selector: 'app-show-deeplink',
@@ -16,15 +17,15 @@ import {Link} from "../../model/link";
 })
 export class ShowDeeplinkComponent implements OnInit {
 
-
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  searchString: string;
+  //searchString: string;
   first = 0;
-  rows = 5;
-  links: any[] = links;
+  // rows = 5;
+  links: any[];
 
-  displayedColumns: string[] = ['name', 'description', 'customer', 'environment', 'editedby', 'modificationdate', 'profile', 'status', 'details', 'delete', 'Copy'];//'update',
+  displayedColumns: string[] = ['linkname', 'description', 'customer', 'environment', 'editedby', 'modificationdate',
+    'profile', 'status', 'details', 'delete', 'Copy'];//'update',
 
   dataSource = new MatTableDataSource(this.links);
   //expandedElement: linkElement | null;
@@ -40,7 +41,7 @@ export class ShowDeeplinkComponent implements OnInit {
 
   filteredValues = {
     description: '',
-    name: '',
+    linkname: '',
     customer: '',
     environment: '',
     editedby: '',
@@ -50,18 +51,21 @@ export class ShowDeeplinkComponent implements OnInit {
   };
   resultsLength = 0;
 
-  constructor(private linkService: LinkService, private router: Router, private dialog: MatDialog, private cdRef: ChangeDetectorRef) {
+  constructor(private linkService: LinkService, private router: Router, private dialog: MatDialog, private cdRef: ChangeDetectorRef,
+              private authService: AuthService) {
 
-    this.dataSource.data = this.links;
-    this.dataSource.filterPredicate = this.createFilter();
+
   }
 
   ngOnInit(): void {
 
     this.applyFilter();
-    this.linkService.loadLinks().subscribe((data: Link[]) => {
-      console.log(data);
+    const id = localStorage.getItem('currentUserid');
+    this.linkService.loadLinks(Number(id)).subscribe((data: Link[]) => {
+console.log(data)
       this.links = data;
+      this.dataSource.data = this.links;
+      this.dataSource.filterPredicate = this.createFilter();
     })
   }
 
@@ -70,8 +74,7 @@ export class ShowDeeplinkComponent implements OnInit {
 
     this.cdRef.detectChanges();
     this.dataSource.paginator = this.paginator;
-    this.resultsLength = this.links.length;
-
+    this.resultsLength = this.dataSource.data.length;
     //this.dataSource.sort = this.sort;
   }
 
@@ -89,6 +92,7 @@ export class ShowDeeplinkComponent implements OnInit {
     selBox.select();
     document.execCommand('copy');
     document.body.removeChild(selBox);
+    this.authService.openSnackBar("Link is coppied", "", "green-snackbar")
   }
 
 
@@ -99,6 +103,7 @@ export class ShowDeeplinkComponent implements OnInit {
 
    });  */
   }
+  private data: any;
 
   public redirectToAddLink() {
     this.linkService.dataRow = null;
@@ -106,7 +111,7 @@ export class ShowDeeplinkComponent implements OnInit {
 
   }
 
-  public redirectToDelete = (id: string) => {
+  public redirectToDelete = (element: Link) => {
     //  this.dataSource.data.splice(ELEMENT_DATA.indexOf(element),1);
     //  this.dataSource = new MatTableDataSource<PeriodicElement>(this.dataSource.data);
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
@@ -115,8 +120,18 @@ export class ShowDeeplinkComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        console.log('Yes clicked');
-        // DO SOMETHING
+
+        const userid = localStorage.getItem('currentUserid');
+        this.linkService.deleteLink(Number(userid), element.id).subscribe(
+          res => {
+            this.data = this.dataSource.data;
+            let index: number = this.data.findIndex(d => d === element);
+            console.log(this.data.findIndex(d => d === element));
+            this.data.splice(index, 1)
+            this.dataSource = new MatTableDataSource(this.data);
+            this.cdRef.detectChanges();
+          }
+        );
       }
     });
   }
@@ -124,7 +139,7 @@ export class ShowDeeplinkComponent implements OnInit {
   createFilter(): (data: any, filter: string) => boolean {
     let filterFunction = function (data, filter): boolean {
       let searchTerms = JSON.parse(filter);
-      return data.name.toLowerCase().indexOf(searchTerms.name) !== -1
+      return data.linkname.toLowerCase().indexOf(searchTerms.linkname) !== -1
         && data.description.toString().toLowerCase().indexOf(searchTerms.description) !== -1
         && data.customer.toString().toLowerCase().indexOf(searchTerms.customer) !== -1
         && data.environment.toString().toLowerCase().indexOf(searchTerms.environment) !== -1
@@ -144,7 +159,7 @@ export class ShowDeeplinkComponent implements OnInit {
     this.nameFilter.valueChanges
       .subscribe(
         name => {
-          this.filteredValues.name = name;
+          this.filteredValues.linkname = name;
           this.dataSource.filter = JSON.stringify(this.filteredValues);
         }
       )
@@ -201,14 +216,3 @@ export class ShowDeeplinkComponent implements OnInit {
       )
   }
 }
-
-/*
-
-export interface linkElement {
-  name: string;
-  customer: string;
-  environment: string;
-  editedby: string;
-  status:string;
-  description: string;
-} */

@@ -1,65 +1,94 @@
-import { Injectable } from '@angular/core';
-import { HttpClient,HttpHeaders,HttpErrorResponse   } from '@angular/common/http';
-import { Observable ,Subject} from 'rxjs';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {empty, Observable, throwError} from 'rxjs';
 import {Link} from "../model/link";
-
-import {  throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import {catchError, map} from 'rxjs/operators';
+import {MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition} from "@angular/material/snack-bar";
 
 @Injectable({
   providedIn: 'root'
 })
 export class LinkService {
-  private api = "http://localhost:8080/api/deeplinks";
-
+  private api = "http://localhost:8080/api/deeplinks/";
+  horizontalPosition: MatSnackBarHorizontalPosition = 'center';
+  verticalPosition: MatSnackBarVerticalPosition = 'top';
   httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
       'accept': 'application/json'
     })
   }
-  private link: Subject<any>;
-  link$: Observable<any>;
-  dataRow:any;
-  //link: Subject<User> = new Subject();
 
-  constructor(private http:HttpClient) {
-    this.link = new Subject();
-    this.link$ = this.link.asObservable();
-   }
+  dataRow: any;
+  constructor(private http: HttpClient, private snackBar: MatSnackBar) {
 
-  loadLinks(): Observable<Link[]>{
-    return this.http.get<Link[]>(this.api+'/users/{userid}/links',  this.httpOptions) .pipe(
+  }
+
+  /**
+   * Get all links object in the Backend server data base.
+   */
+  loadLinks(id: number): Observable<Link[]> {
+    return this.http.get<Link[]>(this.api + 'users/' + id + '/links', this.httpOptions).pipe(
       catchError(this.errorHandler)
     );
   }
-  saveLink(link: Link): Observable<Link>{
-    return this.http.post<Link>(this.api+'/users/{userid}/link', link, this.httpOptions).pipe(
-      catchError(this.errorHandler)
+
+  /**
+   * Save linkobject in the Backend server data base.
+   * @param link
+   */
+  saveLink(link: Link, id: number): Observable<any> {
+
+    return this.http.post<any>(`${this.api}users/${id}/link`, link, this.httpOptions).pipe(
+      map((res: Response) => {
+        this.openSnackBar("Link added successfully", "", "green-snackbar");
+        return res || {}
+      }),
+      catchError((err, caught) => {
+        this.openSnackBar("error when add Link", "", "red-snackbar");
+        return empty();
+      })
     );
   }
+
   /**
    * Update an existing link object in the Backend server data base.
    * @param link
    */
-  updateLink(link: Link): Observable<Link>{
-    return this.http.put<Link>(this.api+'/users/{userid}/links/'+link.id, link, this.httpOptions).pipe(
-      catchError(this.errorHandler)
-    );
+  updateLink(link: Link, userid: number): Observable<any> {
+    return this.http.put<any>(this.api + 'users/' + userid + '/links/' + link.id, link, this.httpOptions).pipe(
+      map((res: Response) => {
+        this.openSnackBar("Link updated successfully", "", "green-snackbar");
+        return res || {}
+      }),
+      catchError((err, caught) => {
+        this.openSnackBar("Link not found!", "", "red-snackbar");
+        return empty();
+      })
+    )
+    //  );
   }
+
   /**
    * Delete an existing Link object in the Backend server data base.
-   * @param link
+   * @param userid, link id
    */
-  deleteLink(link: Link): Observable<string>{
-    return this.http.delete<string>(this.api+'/users/{userid}/links/'+link.id, this.httpOptions).pipe(
-      catchError(this.errorHandler)
-    );
+  deleteLink(userid: number, linkid: number): Observable<any> {
+    return this.http.delete<any>(this.api + 'users/' + userid + '/link/' + linkid, this.httpOptions).pipe(
+      map((res: any) => {
+        this.openSnackBar("Link deleted successfully", "", "green-snackbar");
+        return res || {}
+      }),
+      catchError((err, caught) => {
+        this.openSnackBar("Link not found!", "", "red-snackbar");
+        return empty();
+      })
+    )
   }
 
   errorHandler(error) {
     let errorMessage = '';
-    if(error.error instanceof ErrorEvent) {
+    if (error.error instanceof ErrorEvent) {
       // Get client-side error
       errorMessage = error.error.message;
     } else {
@@ -68,5 +97,15 @@ export class LinkService {
     }
     console.log(errorMessage);
     return throwError(errorMessage);
+  }
+
+
+  openSnackBar(message: string, action: string, className: string) {
+    this.snackBar.open(message, action, {
+      duration: 5000,
+      horizontalPosition: this.horizontalPosition,
+      verticalPosition: this.verticalPosition,
+      panelClass: [className]
+    });
   }
 }

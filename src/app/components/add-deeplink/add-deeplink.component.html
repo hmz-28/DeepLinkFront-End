@@ -2,30 +2,34 @@
   Deep Link Table</h2>
 <div class="container-fluid mat-elevation-z8">
   <form [formGroup]="userTable">
-    <div class="action-container"  >
-      <!--  <button mat-raised-button color="primary" type="submit" (click)="addRow()">Add row</button> -->
-      <!-- <button mat-raised-button color="accent" type="submit" (click)="submitForm()">Submit</button> -->
-      <button mat-raised-button *ngIf="!isSubmit" color="accent" (click)="redirectToUpdate(userTable)"> Update </button>
-      <button *ngIf="isSubmit" style="float:right;" mat-raised-button color="accent" [disabled]="userTable.invalid" type="submit" (click)="submitForm(userTable)">Submit</button>
+    <div class="action-container">
+
+      <button mat-raised-button *ngIf="!isSubmit" [disabled]="!userTable.dirty" color="accent"
+              (click)="redirectToUpdate(userTable)"> Update
+      </button>
+      <button *ngIf="isSubmit" style="float:right;" mat-raised-button color="accent"
+              [disabled]="userTable.invalid" type="submit" (click)="submitForm(userTable)">Submit
+      </button>
     </div>
     <div class="form-group row">
 
       <div class="col-lg-4">
         <mat-form-field class="fullwidth form-element">
-          <!-- <label class="col-lg-6 col-form-label form-control-label">Link Name</label> -->
+
           <input matInput type="text" value="" placeholder="Link Name" formControlName="linkname">
         </mat-form-field>
       </div>
       <div class="col-lg-4">
         <mat-form-field class="fullwidth form-element">
-          <!-- <label class="col-lg-6 col-form-label form-control-label">Link Prefix</label> -->
-          <input matInput type="text" value="http://www.smartech-tn.com/launch?" placeholder="Link Prefix" readonly>
+
+          <input matInput type="text" value="http://www.smartech-tn.com/launch?" placeholder="Link Prefix"
+                 readonly>
 
         </mat-form-field>
       </div>
       <div class="col-lg-4">
         <mat-form-field class="fullwidth form-element">
-          <!-- <label class="col-lg-6 col-form-label form-control-label">Link Description</label> -->
+
           <input matInput type="text" value="" placeholder="Link Description" formControlName="description">
         </mat-form-field>
       </div>
@@ -34,16 +38,12 @@
 
       <div class="col-lg-4">
         <mat-form-field class="fullwidth">
-          <!-- <label class="col-lg-6 col-form-label form-control-label">Customer</label> -->
+
           <input matInput type="text" placeholder="Customer" formControlName="customer">
         </mat-form-field>
       </div>
       <div class="col-lg-4">
-        <!--   <mat-form-field class="fullwidth"> -->
-        <!-- <label class="col-lg-6 col-form-label form-control-label">Environment</label> -->
-        <!--     <input matInput type="text" placeholder="Environment" formControlName="environment">
 
-        </mat-form-field> -->
         <mat-form-field class="fullwidth">
           <mat-select formControlName="environment" placeholder="Environment">
             <mat-option value="Prod">Prod</mat-option>
@@ -54,7 +54,7 @@
       </div>
       <div class="col-lg-4">
         <mat-form-field class="fullwidth">
-          <!-- <label class="col-lg-6 col-form-label form-control-label">Edited by</label> -->
+
           <input matInput type="text" placeholder="Edited by" value="" formControlName="editedby">
         </mat-form-field>
       </div>
@@ -62,20 +62,17 @@
     <div class="form-group row">
 
       <div class="col-lg-4">
-        <!--     <mat-form-field class="fullwidth">
-          
-          <input matInput type="text" placeholder="Modification date" value="" formControlName="modificationdate">
-        </mat-form-field> -->
 
         <mat-form-field class="fullwidth">
-          <input matInput matInput [matDatepicker]="picker" placeholder="Modification date" formControlName="modificationdate">
+          <input matInput matInput [matDatepicker]="picker" placeholder="Modification date"
+                 formControlName="modificationdate">
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
       </div>
       <div class="col-lg-4">
         <mat-form-field class="fullwidth">
-          <!-- <label class="col-lg-6 col-form-label form-control-label">Profile</label> -->
+
           <input matInput type="text" placeholder="Profile" formControlName="profile">
         </mat-form-field>
       </div>
@@ -91,92 +88,52 @@
     <table class="table table-border">
       <!-- //[ngClass]="{'table-dark': mode}" -->
       <thead class="text-nowrap">
-        <th>Property Name
-          <span class="ui-column-resizer"> </span>
-        </th>
-        <th>Property Value
-          <span class="ui-column-resizer"> </span>
-        </th>
-        <!--    <th>Date Of Birth
+      <th>Property Name
         <span class="ui-column-resizer"> </span>
       </th>
-      <th>Blood Group
+      <th>Property Value
         <span class="ui-column-resizer"> </span>
       </th>
-      <th>Mobile Number</th> -->
-        <th style=" width: 5%;"></th>
+
+      <th style=" width: 5%;"></th>
       </thead>
       <tbody>
-        <ng-container formArrayName="tableRows" *ngFor="let group of getFormControls.controls ; let i=index">
-          <tr *ngIf="group.get('isEditable').value" [formGroupName]="i">
-            <td>
-              <mat-form-field class="fullwidth">
-                <input matInput type="text" formControlName="name">
-              </mat-form-field>
-            </td>
-            <td>
-              <mat-form-field class="fullwidth">
-                <input matInput type="tetx" formControlName="value">
-              </mat-form-field>
-            </td>
-            <!-- <td>
-            <mat-form-field>
-              <input matInput matInput [matDatepicker]="picker" formControlName="dob">
-              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-              <mat-datepicker #picker></mat-datepicker>
+      <ng-container formArrayName="tableRows" *ngFor="let group of getFormControls.controls ; let i=index">
+        <tr *ngIf="group.get('isEditable').value" [formGroupName]="i">
+          <td>
+            <mat-form-field class="fullwidth">
+              <input matInput type="text" formControlName="name">
             </mat-form-field>
           </td>
           <td>
-            <mat-form-field>
-              <mat-select formControlName="bloodGroup">
-                <mat-option value="O+">O</mat-option>
-                <mat-option value="A">A</mat-option>
-                <mat-option value="B">B</mat-option>
-                <mat-option value="AB">AB</mat-option>
-              </mat-select>
+            <mat-form-field class="fullwidth">
+              <input matInput type="tetx" formControlName="value">
             </mat-form-field>
           </td>
+
           <td>
-            <mat-form-field>
-              <input matInput type="text" formControlName="mobNumber">
-            </mat-form-field>
-          </td> -->
-            <td>
-              <mat-icon class="delete" (click)="deleteRow(i)">delete_forever</mat-icon>
-              <mat-icon class="done" (click)="doneRow(group)">done</mat-icon>
-            </td>
-          </tr>
-          <tr *ngIf="!group.get('isEditable').value">
-            <td>
-              {{group.get('name').value}}
-            </td>
-            <td>
-              {{group.get('value').value}}
-            </td>
-            <!--    <td>
-                          {{group.get('email').value}}
-                      </td>
-                      <td>
-                          {{group.get('bloodGroup').value}}
-                      </td>
-                      <td>
-                        {{group.get('mobNumber').value}}
-                      </td> -->
-            <td>
-              <mat-icon class="edit" (click)="editRow(group)">edit</mat-icon>
-            </td>
-          </tr>
-        </ng-container>
+            <mat-icon class="delete" (click)="deleteRow(i)">delete_forever</mat-icon>
+            <mat-icon class="done" (click)="doneRow(group)">done</mat-icon>
+          </td>
+        </tr>
+        <tr *ngIf="!group.get('isEditable').value">
+          <td>
+            {{group.get('name').value}}
+          </td>
+          <td>
+            {{group.get('value').value}}
+          </td>
+
+          <td>
+            <mat-icon class="edit" (click)="editRow(group)">edit</mat-icon>
+          </td>
+        </tr>
+      </ng-container>
       </tbody>
     </table>
     <div class="action-container">
       <button mat-raised-button color="primary" type="submit" (click)="addRow()">Add row</button>
-      <!-- <button mat-raised-button color="accent" type="submit" (click)="submitForm()">Submit</button> -->
-      <!-- <button mat-raised-button color="accent" [disabled]="userTable.invalid" type="submit" (click)="submitForm(userTable)">Submit</button> -->
+
     </div>
   </form>
-</div>
-<div class="output">
-  <p>Form Data: {{userTable.value | json}}</p>
-  <!--  <p>Is Valid: {{userTable.valid}}</p> -->
 </div>
