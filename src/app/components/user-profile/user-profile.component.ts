@@ -28,12 +28,12 @@ export class UserProfileComponent implements OnInit {
     let id = localStorage.getItem('currentUserid');
     this.userService.getUserById(Number(id))
       .subscribe(res => {
-        console.log(res);
+
         this.currentUser.name = res.result.username;
         this.currentUser.company = res.result.company;
         this.currentUser.email = res.result.email;
       }, err => {
-        console.log(err);
+       // console.log(err);
         // this.isLoadingResults = false;
       });
   }

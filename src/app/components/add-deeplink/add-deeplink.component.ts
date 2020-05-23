@@ -42,7 +42,7 @@ export class AddDeeplinkComponent implements OnInit {
   ngOnInit(): void {
 
     if (this.linkService.dataRow != null) {
-      //console.log(this.linkService.dataRow);
+
       this.userTable = this.fb.group({
         tableRows: this.fb.array([]),
         id: [this.linkService.dataRow.id],
@@ -59,11 +59,11 @@ export class AddDeeplinkComponent implements OnInit {
       if (this.linkService.dataRow.linkvalue != undefined) {
         var splitted = this.linkService.dataRow.linkvalue.replace('http://www.smartech-tn.com/launch?', '');
         var newsplitted = splitted.split("&");
-       // console.log(newsplitted)
+
         newsplitted.forEach(function (value) {
           var splitted_value = value.split("=");
           const control = this.userTable.get('tableRows') as FormArray;
-          //  console.log(splitted_value[1])
+
           const row = this.fb.group({
             name: [splitted_value[0]],
             value: [splitted_value[1]],
@@ -110,7 +110,7 @@ export class AddDeeplinkComponent implements OnInit {
 
         isEditable: [false]
       });
-      //  console.log( control)
+
       control.push(row);
 
     });
@@ -167,7 +167,7 @@ export class AddDeeplinkComponent implements OnInit {
 
     var control = form.get('tableRows') as FormArray;
     this.touchedRows = control.controls.filter(row => row.touched).map(row => row.value);
-    //console.log(this.userTable.value);
+
     var parsedArray = control.controls;
     var mapping: String = "";
     parsedArray.forEach(function (group) {
@@ -177,12 +177,12 @@ export class AddDeeplinkComponent implements OnInit {
 
     }.bind(this));
     var newMapping = mapping.substring(0, mapping.length - 1);
-    console.log(newMapping);
+
     const newLink = new Link(0, form.get('linkname').value,  newMapping, form.get('customer').value,
       form.get('environment').value, form.get('editedby').value, form.get('modificationdate').value,
       form.get('status').value, form.get('description').value, form.get('profile').value);
 
-    //console.log(newLink);
+
 
     let id = localStorage.getItem('currentUserid');
 
@@ -196,7 +196,7 @@ export class AddDeeplinkComponent implements OnInit {
   }
 
   public redirectToUpdate(form) {
-    console.log(form.value);
+
 
     var control = form.get('tableRows') as FormArray;
     this.touchedRows = control.controls.filter(row => row.touched).map(row => row.value);
@@ -212,7 +212,7 @@ export class AddDeeplinkComponent implements OnInit {
 
     this.linkService.updateLink(newLink, Number(id)).subscribe(
       res => {
-        console.log(res);
+        //console.log(res);
       }
     );
   }

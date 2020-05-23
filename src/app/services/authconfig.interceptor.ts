@@ -17,7 +17,8 @@ export class AuthInterceptor implements HttpInterceptor {
         }
       });
     }
-
+    const baseUrl = document.getElementsByTagName('base')[0].href;
+    const apiReq = req.clone({ url: `${baseUrl}${req.url}` });
     return next.handle(req);
   }
 }

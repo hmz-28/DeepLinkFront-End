@@ -18,7 +18,8 @@ import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 
 import {MaterialModule} from './material/material.module';
 import {ConfirmationDialogComponent} from './components/confirmation-dialog/confirmation-dialog.component';
-
+import { NotfoundComponent } from './components/notfound/notfound.component';
+import { APP_BASE_HREF, Location } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import {ConfirmationDialogComponent} from './components/confirmation-dialog/conf
     AddDeeplinkComponent,
     ShowDeeplinkComponent,
     DashboardComponent,
-    ConfirmationDialogComponent
+    ConfirmationDialogComponent,
+    NotfoundComponent
   ],
   imports: [
     BrowserModule,
@@ -42,7 +44,8 @@ import {ConfirmationDialogComponent} from './components/confirmation-dialog/conf
   ],
   providers: [
 
-    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}
+    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
+    { provide: APP_BASE_HREF, useValue: window['base-href'] }
   ],
   bootstrap: [AppComponent]
 })

@@ -10,7 +10,8 @@ import {MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition}
     providedIn: 'root'
 })
 export class AuthService {
-    endpoint: string = 'http://localhost:8080/api/';
+
+   // endpoint: string = 'http://localhost:8080/api/';
     headers = new HttpHeaders().set('Content-Type', 'application/json');
     currentUser = new User;
     horizontalPosition: MatSnackBarHorizontalPosition = 'center';
@@ -22,7 +23,7 @@ export class AuthService {
 
     // Sign-up
     signUp(user: User): Observable<any> {
-        let api = `${this.endpoint}token/signup`;
+        let api = `api/token/signup`;
         return this.http.post<any>(api, user, {headers: this.headers}).pipe(
             map((res: Response) => {
                 this.openSnackBar("User added successfully", "", "green-snackbar");
@@ -37,8 +38,10 @@ export class AuthService {
 
     // Sign-in
     signIn(user: User) {
-
-        return this.http.post(`${this.endpoint}token/generate-token`, user, {headers: this.headers})
+      //console.log(window.location.href);
+      //console.log(window.location.hostname);
+      //console.log(window.location.origin);
+        return this.http.post(`api/token/generate-token`, user, {headers: this.headers})
             .subscribe((res: any) => {
 
                     this.openSnackBar("User Logged In", "", "green-snackbar");
@@ -82,7 +85,7 @@ export class AuthService {
 
     // User profile
     getUserProfile(id): Observable<any> {
-        let api = `${this.endpoint}users/user/${id}`;
+        let api = `api/users/user/${id}`;
         return this.http.get(api, {headers: this.headers}).pipe(
             map((res: Response) => {
                 console.log(res);

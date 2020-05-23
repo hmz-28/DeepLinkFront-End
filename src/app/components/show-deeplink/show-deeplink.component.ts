@@ -62,7 +62,7 @@ export class ShowDeeplinkComponent implements OnInit {
     this.applyFilter();
     const id = localStorage.getItem('currentUserid');
     this.linkService.loadLinks(Number(id)).subscribe((data: Link[]) => {
-console.log(data)
+
       this.links = data;
       this.dataSource.data = this.links;
       this.dataSource.filterPredicate = this.createFilter();
@@ -126,7 +126,7 @@ console.log(data)
           res => {
             this.data = this.dataSource.data;
             let index: number = this.data.findIndex(d => d === element);
-            console.log(this.data.findIndex(d => d === element));
+
             this.data.splice(index, 1)
             this.dataSource = new MatTableDataSource(this.data);
             this.cdRef.detectChanges();

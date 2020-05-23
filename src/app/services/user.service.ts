@@ -11,7 +11,7 @@ export class UserService {
   constructor(private http: HttpClient) {
   }
 
-  baseUrl: string = 'http://localhost:8080/api/users/';
+  //baseUrl: string = 'http://localhost:8080/api/users/';
   httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
@@ -20,7 +20,7 @@ export class UserService {
   }
 
   updateUser(user: User): Observable<User> {
-    return this.http.put<User>(this.baseUrl + '/user/' + user.id, user, this.httpOptions);
+    return this.http.put<User>('api/users//user/' + user.id, user, this.httpOptions);
   }
 
 
@@ -31,7 +31,7 @@ export class UserService {
 
   getUserById(id: number): Observable<any> {
 
-    return this.http.get<any>(`${this.baseUrl}user/${id}`,this.httpOptions);
+    return this.http.get<any>(`api/users/user/${id}`,this.httpOptions);
   }
 
 

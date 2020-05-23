@@ -9,7 +9,7 @@ import {MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition}
   providedIn: 'root'
 })
 export class LinkService {
-  private api = "http://localhost:8080/api/deeplinks/";
+ // private api = "http://localhost:8080/api/deeplinks/";
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   httpOptions = {
@@ -28,7 +28,7 @@ export class LinkService {
    * Get all links object in the Backend server data base.
    */
   loadLinks(id: number): Observable<Link[]> {
-    return this.http.get<Link[]>(this.api + 'users/' + id + '/links', this.httpOptions).pipe(
+    return this.http.get<Link[]>( 'api/deeplinks/users/' + id + '/links', this.httpOptions).pipe(
       catchError(this.errorHandler)
     );
   }
@@ -39,7 +39,7 @@ export class LinkService {
    */
   saveLink(link: Link, id: number): Observable<any> {
 
-    return this.http.post<any>(`${this.api}users/${id}/link`, link, this.httpOptions).pipe(
+    return this.http.post<any>(`api/deeplinks/users/${id}/link`, link, this.httpOptions).pipe(
       map((res: Response) => {
         this.openSnackBar("Link added successfully", "", "green-snackbar");
         return res || {}
@@ -56,7 +56,7 @@ export class LinkService {
    * @param link
    */
   updateLink(link: Link, userid: number): Observable<any> {
-    return this.http.put<any>(this.api + 'users/' + userid + '/links/' + link.id, link, this.httpOptions).pipe(
+    return this.http.put<any>( 'api/deeplinks/users/' + userid + '/links/' + link.id, link, this.httpOptions).pipe(
       map((res: Response) => {
         this.openSnackBar("Link updated successfully", "", "green-snackbar");
         return res || {}
@@ -74,7 +74,7 @@ export class LinkService {
    * @param userid, link id
    */
   deleteLink(userid: number, linkid: number): Observable<any> {
-    return this.http.delete<any>(this.api + 'users/' + userid + '/link/' + linkid, this.httpOptions).pipe(
+    return this.http.delete<any>( 'api/deeplinks/users/' + userid + '/link/' + linkid, this.httpOptions).pipe(
       map((res: any) => {
         this.openSnackBar("Link deleted successfully", "", "green-snackbar");
         return res || {}
