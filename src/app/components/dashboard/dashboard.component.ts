@@ -2,7 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../../services/auth.service';
 import {Router} from '@angular/router';
 import {User} from './../../model/user';
-
+//import $ from 'jquery';
+declare var $: any;
 
 @Component({
   selector: 'app-dashboard',
@@ -22,5 +23,16 @@ export class DashboardComponent implements OnInit {
 
   signOut() {
     this.authService.doLogout();
+  }
+
+  openClose() {
+
+    $("#close-sidebar").click(function () {
+      $(".page-wrapper").removeClass("toggled");
+    });
+    $("#show-sidebar").click(function () {
+      $(".page-wrapper").addClass("toggled");
+    });
+
   }
 }
