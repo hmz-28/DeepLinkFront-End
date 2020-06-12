@@ -28,7 +28,7 @@ export class SignUpComponent implements OnInit {
       {type: 'required', message: 'password is not mutch.'},
     ],
   }
-
+  submitted = false;
 
   constructor(
     public fb: FormBuilder,
@@ -36,15 +36,19 @@ export class SignUpComponent implements OnInit {
     public router: Router
   ) {
 
+
+  }
+
+  ngOnInit(): void {
     this.signupForm = this.fb.group({
       username: new FormControl('', Validators.compose([
         Validators.required
       ])),
       email: new FormControl('', Validators.compose([
         Validators.required,
-        Validators.minLength(6),
-        Validators.maxLength(30)
+        Validators.email
       ])),
+      company: new FormControl(''),
       password: new FormControl('', Validators.compose([
         Validators.required,
         Validators.minLength(6),
@@ -60,10 +64,11 @@ export class SignUpComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-  }
-
   registerUser() {
+    this.submitted = true;
+    if (this.signupForm.invalid) {
+      return;
+    }
 
     this.authService.signUp(this.signupForm.value).subscribe((res) => {
       if (res) {
@@ -74,10 +79,19 @@ export class SignUpComponent implements OnInit {
     })
   }
 
+  public hasError = (controlName: string, errorName: string) => {
+    return this.signupForm.controls[controlName].hasError(errorName);
+  }
+
   password(formGroup: FormGroup) {
     const {value: password} = formGroup.get('password');
     const {value: confirmPassword} = formGroup.get('confirmpassword');
     return password === confirmPassword ? null : {passwordNotMatch: true};
+  }
+
+  // convenience getter for easy access to form fields
+  get f() {
+    return this.signupForm.controls;
   }
 
 }

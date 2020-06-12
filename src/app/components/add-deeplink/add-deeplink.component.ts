@@ -5,6 +5,11 @@ import {LinkService} from './../../services/link.service';
 import {AuthService} from '../../services/auth.service';
 import {User} from './../../model/user';
 import {Link} from "../../model/link";
+import { AppDateAdapter, APP_DATE_FORMATS} from '../../shared/date.adapter';
+import { NativeDateAdapter, DateAdapter, MAT_DATE_FORMATS } from "@angular/material/core";
+import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
+import {DialoglinkComponent} from "../dialoglink/dialoglink.component";
+
 
 const cleanTheData = data =>
   data
@@ -18,7 +23,15 @@ const cleanTheData = data =>
 @Component({
   selector: 'app-add-deeplink',
   templateUrl: './add-deeplink.component.html',
-  styleUrls: ['./add-deeplink.component.css']
+  styleUrls: ['./add-deeplink.component.css'],
+  providers: [
+    {
+      provide: DateAdapter, useClass: AppDateAdapter
+    },
+    {
+      provide: MAT_DATE_FORMATS, useValue: APP_DATE_FORMATS
+    }
+  ]
 })
 
 
@@ -35,7 +48,7 @@ export class AddDeeplinkComponent implements OnInit {
 
   dataSet = cleanTheData(this.dataSource);
 
-  constructor(private fb: FormBuilder, private linkService: LinkService, private authService: AuthService) {
+  constructor(private fb: FormBuilder, private linkService: LinkService, private authService: AuthService,private dialog: MatDialog) {
     this.currentUser = this.authService.currentUser;
   }
 
@@ -164,7 +177,7 @@ export class AddDeeplinkComponent implements OnInit {
   }
 
   submitForm(form) {
-
+    //console.log(form);
     var control = form.get('tableRows') as FormArray;
     this.touchedRows = control.controls.filter(row => row.touched).map(row => row.value);
 
@@ -189,6 +202,7 @@ export class AddDeeplinkComponent implements OnInit {
     this.linkService.saveLink(newLink, Number(id)).subscribe(
       res => {
         //  console.log(res);
+        this.openDialog(newMapping);
       }
     );
 
@@ -215,5 +229,16 @@ export class AddDeeplinkComponent implements OnInit {
         //console.log(res);
       }
     );
+  }
+
+
+  openDialog(data:string) {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = data;
+
+    this.dialog.open(DialoglinkComponent, dialogConfig);
   }
 }

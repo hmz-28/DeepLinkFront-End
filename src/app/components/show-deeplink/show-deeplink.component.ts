@@ -8,6 +8,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {ConfirmationDialogComponent} from './../confirmation-dialog/confirmation-dialog.component';
 import {Link} from "../../model/link";
 import {AuthService} from "../../services/auth.service";
+import {MatSort} from "@angular/material/sort";
 
 
 @Component({
@@ -18,7 +19,7 @@ import {AuthService} from "../../services/auth.service";
 export class ShowDeeplinkComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
-
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
   //searchString: string;
   first = 0;
   // rows = 5;
@@ -66,6 +67,7 @@ export class ShowDeeplinkComponent implements OnInit {
       this.links = data;
       this.dataSource.data = this.links;
       this.dataSource.filterPredicate = this.createFilter();
+      this.dataSource.sort = this.sort;
     })
   }
 

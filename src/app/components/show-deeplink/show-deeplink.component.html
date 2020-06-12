@@ -11,26 +11,27 @@
             <mat-icon aria-label="Example icon-button with a heart icon">add</mat-icon>
         </button>
     </div>
-    <mat-table class="table-responsive" mat-table [dataSource]="dataSource">
+    <mat-table class="table-responsive" mat-table matSort [dataSource]="dataSource">
 
 
         <!-- link name Column -->
         <ng-container matColumnDef="linkname">
-            <th class="header" mat-header-cell *matHeaderCellDef>
-                Name
-                <mat-form-field class="filter" floatLabel="never">
-                    <mat-label>Search</mat-label>
-                    <input matInput [formControl]="nameFilter">
-                </mat-form-field>
+            <th class="header" mat-sort-header mat-header-cell *matHeaderCellDef>
+
+              <mat-form-field class="fullwidth" floatLabel="never">
+                <mat-label>Name</mat-label>
+                <input matInput [formControl]="nameFilter">
+              </mat-form-field>
             </th>
+
             <td mat-cell *matCellDef="let element">{{element.linkname}}</td>
         </ng-container>
         <!-- link description Column -->
         <ng-container matColumnDef="description">
-            <th class="header" mat-header-cell *matHeaderCellDef>
-                Description
+            <th class="header" mat-sort-header  mat-header-cell *matHeaderCellDef>
+
                 <mat-form-field class="filter" floatLabel="never">
-                    <mat-label>Search</mat-label>
+                    <mat-label>Description</mat-label>
                     <input matInput [formControl]="descFilter">
                 </mat-form-field>
             </th>
@@ -38,9 +39,9 @@
         </ng-container>
         <!-- customer Column -->
         <ng-container matColumnDef="customer">
-            <th mat-header-cell *matHeaderCellDef> customer
+            <th mat-sort-header  mat-header-cell *matHeaderCellDef>
                 <mat-form-field class="filter" floatLabel="never">
-                    <mat-label>Search</mat-label>
+                    <mat-label>Customer</mat-label>
                     <input matInput [formControl]="customerFilter">
                 </mat-form-field>
             </th>
@@ -49,9 +50,9 @@
 
         <!-- environment Column -->
         <ng-container matColumnDef="environment">
-            <th mat-header-cell *matHeaderCellDef> environment
+            <th mat-sort-header mat-header-cell *matHeaderCellDef>
                 <mat-form-field class="filter" floatLabel="never">
-                    <mat-label>Search</mat-label>
+                    <mat-label>Environment</mat-label>
                     <input matInput [formControl]="envFilter">
                 </mat-form-field>
             </th>
@@ -59,9 +60,9 @@
         </ng-container>
         <!-- editedby Column -->
         <ng-container matColumnDef="editedby">
-            <th mat-header-cell *matHeaderCellDef> edited by
+            <th mat-sort-header mat-header-cell *matHeaderCellDef>
                 <mat-form-field class="filter" floatLabel="never">
-                    <mat-label>Search</mat-label>
+                    <mat-label>Edited by</mat-label>
                     <input matInput [formControl]="editedbyFilter">
                 </mat-form-field>
             </th>
@@ -69,19 +70,19 @@
         </ng-container>
         <!-- modificationdate Column -->
         <ng-container matColumnDef="modificationdate">
-            <th mat-header-cell *matHeaderCellDef> modification date
+            <th mat-sort-header mat-header-cell *matHeaderCellDef>
                 <mat-form-field class="filter" floatLabel="never">
-                    <mat-label>Search</mat-label>
+                    <mat-label>Modification date</mat-label>
                     <input matInput [formControl]="modDateFilter">
                 </mat-form-field>
             </th>
-            <td mat-cell *matCellDef="let element"> {{element.modificationdate | date:'mm/dd/yyyy'}} </td>
+            <td mat-cell *matCellDef="let element"> {{element.modificationdate | date:'dd/MM/yyyy'}} </td>
         </ng-container>
         <!-- profile Column -->
         <ng-container matColumnDef="profile">
-            <th mat-header-cell *matHeaderCellDef> profile
+            <th mat-sort-header mat-header-cell *matHeaderCellDef>
                 <mat-form-field class="filter" floatLabel="never">
-                    <mat-label>Search</mat-label>
+                    <mat-label>Profile</mat-label>
                     <input matInput [formControl]="profileFilter">
                 </mat-form-field>
             </th>
@@ -89,9 +90,9 @@
         </ng-container>
         <!-- status Column -->
         <ng-container matColumnDef="status">
-            <th mat-header-cell *matHeaderCellDef> status
+            <th mat-sort-header mat-header-cell *matHeaderCellDef>
                 <mat-form-field class="filter" floatLabel="never">
-                    <mat-label>Search</mat-label>
+                    <mat-label>Status</mat-label>
                     <input matInput [formControl]="statusFilter">
                 </mat-form-field>
             </th>
@@ -101,7 +102,7 @@
 
 
         <ng-container matColumnDef="details">
-            <th mat-header-cell *matHeaderCellDef> Details </th>
+            <th mat-sort-header mat-header-cell *matHeaderCellDef> Details </th>
             <td mat-cell *matCellDef="let element">
 
                 <button mat-icon-button color="primary" (click)="redirectToDetails('./../add-deeplink',element)" matTooltip="Link details">

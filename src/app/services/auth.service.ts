@@ -38,13 +38,11 @@ export class AuthService {
 
     // Sign-in
     signIn(user: User) {
-      //console.log(window.location.href);
-      //console.log(window.location.hostname);
-      //console.log(window.location.origin);
+
         return this.http.post(`api/token/generate-token`, user, {headers: this.headers})
             .subscribe((res: any) => {
 
-                    this.openSnackBar("User Logged In", "", "green-snackbar");
+                    this.openSnackBar("You are logged In", "", "green-snackbar");
 
                     localStorage.setItem('access_token', res.result.token);
                     localStorage.setItem('currentUserid', res.result.user.userId);

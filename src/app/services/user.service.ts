@@ -20,7 +20,7 @@ export class UserService {
   }
 
   updateUser(user: User): Observable<User> {
-    return this.http.put<User>('api/users//user/' + user.id, user, this.httpOptions);
+    return this.http.put<User>('api/users/user/' + user.id, user, this.httpOptions);
   }
 
 
