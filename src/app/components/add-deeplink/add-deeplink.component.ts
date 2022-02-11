@@ -5,10 +5,11 @@ import {LinkService} from './../../services/link.service';
 import {AuthService} from '../../services/auth.service';
 import {User} from './../../model/user';
 import {Link} from "../../model/link";
-import { AppDateAdapter, APP_DATE_FORMATS} from '../../shared/date.adapter';
-import { NativeDateAdapter, DateAdapter, MAT_DATE_FORMATS } from "@angular/material/core";
+import {APP_DATE_FORMATS, AppDateAdapter} from '../../shared/date.adapter';
+import {DateAdapter, MAT_DATE_FORMATS} from "@angular/material/core";
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {DialoglinkComponent} from "../dialoglink/dialoglink.component";
+import {UserService} from "../../services/user.service";
 
 
 const cleanTheData = data =>
@@ -41,19 +42,17 @@ export class AddDeeplinkComponent implements OnInit {
   control: FormArray;
   isSubmit: boolean;
   touchedRows: any;
-  // customForm: Subject<any> = new Subject();
-  //formattedMessage: String;
   dataSource: Array<any> = links;
   currentUser: User;
 
   dataSet = cleanTheData(this.dataSource);
 
-  constructor(private fb: FormBuilder, private linkService: LinkService, private authService: AuthService,private dialog: MatDialog) {
-    this.currentUser = this.authService.currentUser;
+  constructor(private fb: FormBuilder, private linkService: LinkService, private authService: AuthService, private dialog: MatDialog, private userService: UserService) {
+
   }
 
   ngOnInit(): void {
-
+    this.currentUser = this.authService.currentUser;
     if (this.linkService.dataRow != null) {
 
       this.userTable = this.fb.group({
@@ -111,6 +110,19 @@ export class AddDeeplinkComponent implements OnInit {
       this.updateEditCache();
       this.isSubmit = true;
     }
+
+
+    if (this.currentUser.name == undefined) {
+      let id = localStorage.getItem('currentUserid');
+      this.userService.getUserById(Number(id))
+        .subscribe(res => {
+          this.userTable.patchValue({editedby: res.result.username}
+          )
+        }, err => {
+          // console.log(err);
+          // this.isLoadingResults = false;
+        });
+    }
   }
 
   updateEditCache(): void {
@@ -139,9 +151,6 @@ export class AddDeeplinkComponent implements OnInit {
     return this.fb.group({
       name: [vname, Validators.required],
       value: [v_value, [Validators.required]],
-      /*   dob: ['', [Validators.required]],
-        bloodGroup: [''],
-        mobNumber: ['', [Validators.required, Validators.maxLength(10)]], */
       isEditable: [true]
     });
   }
@@ -179,7 +188,7 @@ export class AddDeeplinkComponent implements OnInit {
   submitForm(form) {
     //console.log(form);
     var control = form.get('tableRows') as FormArray;
-    this.touchedRows = control.controls.filter(row => row.touched).map(row => row.value);
+ //   this.touchedRows = control.controls.filter(row => row.touched).map(row => row.value);
 
     var parsedArray = control.controls;
     var mapping: String = "";
@@ -191,18 +200,18 @@ export class AddDeeplinkComponent implements OnInit {
     }.bind(this));
     var newMapping = mapping.substring(0, mapping.length - 1);
 
-    const newLink = new Link(0, form.get('linkname').value,  newMapping, form.get('customer').value,
+    const newLink = new Link(0, form.get('linkname').value, newMapping, form.get('customer').value,
       form.get('environment').value, form.get('editedby').value, form.get('modificationdate').value,
       form.get('status').value, form.get('description').value, form.get('profile').value);
-
 
 
     let id = localStorage.getItem('currentUserid');
 
     this.linkService.saveLink(newLink, Number(id)).subscribe(
       res => {
-        //  console.log(res);
-        this.openDialog(newMapping);
+
+
+        this.openDialog(res.linkvalue);
       }
     );
 
@@ -211,28 +220,19 @@ export class AddDeeplinkComponent implements OnInit {
 
   public redirectToUpdate(form) {
 
+    const newLink = this.linkService.linkFormat(form);
 
-    var control = form.get('tableRows') as FormArray;
-    this.touchedRows = control.controls.filter(row => row.touched).map(row => row.value);
-    var parsedArray = control.controls;
-    var mapping: String;
-    parsedArray.forEach(function (group) {
-      mapping += group.get('name').value + '=' + group.get('value').value + '&';
-    }.bind(this));
-    const newLink = new Link(form.get('id').value, form.get('linkname').value, mapping, form.get('customer').value,
-      form.get('environment').value, form.get('editedby').value, form.get('modificationdate').value,
-      form.get('status').value, form.get('description').value, form.get('profile').value);
     let id = localStorage.getItem('currentUserid');
 
     this.linkService.updateLink(newLink, Number(id)).subscribe(
       res => {
-        //console.log(res);
+        this.openDialog(res.linkvalue);
       }
     );
   }
 
 
-  openDialog(data:string) {
+  openDialog(data: string) {
     const dialogConfig = new MatDialogConfig();
 
     dialogConfig.disableClose = true;

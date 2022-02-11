@@ -17,7 +17,7 @@ export class AuthInterceptor implements HttpInterceptor {
         }
       });
     }
-    const baseUrl = 'http://localhost:8080/';//document.getElementsByTagName('base')[0].href;
+    const baseUrl ='http://localhost:8080/';//document.getElementsByTagName('base')[0].href;//
     const apiReq = req.clone({url: `${baseUrl}${req.url}`});
     return next.handle(apiReq);
   }

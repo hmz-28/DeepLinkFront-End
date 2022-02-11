@@ -1,6 +1,21 @@
-h1{
+td{
+  cursor: pointer;
+
+}
+
+h2 {
   background: rgb(0, 182, 240);  /* fallback for old browsers */
   background: -webkit-linear-gradient(to left, #185a9d,  rgb(0, 182, 240));  /* Chrome 10-25, Safari 5.1-6 */
   background: linear-gradient(to left, #185a9d,  rgb(0, 182, 240));
   color: #fff;
+  overflow: auto;
+  position: sticky;
+  top:0;
+  /*   padding: 5px; */
+  display: flex;
+  justify-content: space-between;
+  /*    margin-bottom: 20px; */
+}
+.full-width-field {
+  width: 80%;
 }

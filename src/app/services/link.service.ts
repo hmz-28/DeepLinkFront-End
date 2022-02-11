@@ -1,15 +1,16 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
 import {empty, Observable, throwError} from 'rxjs';
 import {Link} from "../model/link";
 import {catchError, map} from 'rxjs/operators';
 import {MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition} from "@angular/material/snack-bar";
+import {FormArray} from "@angular/forms";
 
 @Injectable({
   providedIn: 'root'
 })
 export class LinkService {
- // private api = "http://localhost:8080/api/deeplinks/";
+
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   httpOptions = {
@@ -20,6 +21,7 @@ export class LinkService {
   }
 
   dataRow: any;
+
   constructor(private http: HttpClient, private snackBar: MatSnackBar) {
 
   }
@@ -28,7 +30,7 @@ export class LinkService {
    * Get all links object in the Backend server data base.
    */
   loadLinks(id: number): Observable<Link[]> {
-    return this.http.get<Link[]>( 'api/deeplinks/users/' + id + '/links', this.httpOptions).pipe(
+    return this.http.get<Link[]>('api/deeplinks/users/' + id + '/links', this.httpOptions).pipe(
       catchError(this.errorHandler)
     );
   }
@@ -41,11 +43,13 @@ export class LinkService {
 
     return this.http.post<any>(`api/deeplinks/users/${id}/link`, link, this.httpOptions).pipe(
       map((res: Response) => {
+       // console.log(res)
         this.openSnackBar("Link added successfully", "", "green-snackbar");
         return res || {}
       }),
-      catchError((err, caught) => {
-        this.openSnackBar("error when add Link", "", "red-snackbar");
+      catchError((err:HttpErrorResponse) => {
+       // console.log(err.json())
+        this.openSnackBar(`${err.error.message}`, "", "red-snackbar");//"error when add Link"
         return empty();
       })
     );
@@ -56,7 +60,7 @@ export class LinkService {
    * @param link
    */
   updateLink(link: Link, userid: number): Observable<any> {
-    return this.http.put<any>( 'api/deeplinks/users/' + userid + '/links/' + link.id, link, this.httpOptions).pipe(
+    return this.http.put<any>('api/deeplinks/users/' + userid + '/links/' + link.id, link, this.httpOptions).pipe(
       map((res: Response) => {
         this.openSnackBar("Link updated successfully", "", "green-snackbar");
         return res || {}
@@ -74,7 +78,7 @@ export class LinkService {
    * @param userid, link id
    */
   deleteLink(userid: number, linkid: number): Observable<any> {
-    return this.http.delete<any>( 'api/deeplinks/users/' + userid + '/link/' + linkid, this.httpOptions).pipe(
+    return this.http.delete<any>('api/deeplinks/users/' + userid + '/link/' + linkid, this.httpOptions).pipe(
       map((res: any) => {
         this.openSnackBar("Link deleted successfully", "", "green-snackbar");
         return res || {}
@@ -86,6 +90,10 @@ export class LinkService {
     )
   }
 
+  /**
+   * error handler
+   * @param error
+   */
   errorHandler(error) {
     let errorMessage = '';
     if (error.error instanceof ErrorEvent) {
@@ -99,7 +107,9 @@ export class LinkService {
     return throwError(errorMessage);
   }
 
-
+  /*
+  * function to show notification
+   */
   openSnackBar(message: string, action: string, className: string) {
     this.snackBar.open(message, action, {
       duration: 5000,
@@ -108,4 +118,27 @@ export class LinkService {
       panelClass: [className]
     });
   }
+
+  /**
+   * function to genrate link format
+   */
+  linkFormat(form: FormArray): Link {
+
+    var control = form.get('tableRows') as FormArray;
+    // var touchedRows = control.controls.filter(row => row.touched).map(row => row.value);
+    var parsedArray = control.controls;
+    var mapping: String = "";
+    parsedArray.forEach(function (group) {
+      if (mapping != undefined)
+        mapping += group.get('name').value + '=' + group.get('value').value + '&';
+    }.bind(this));
+
+    var newMapping = mapping.substring(0, mapping.length - 1);
+    const newLink = new Link(form.get('id').value, form.get('linkname').value, newMapping, form.get('customer').value,
+      form.get('environment').value, form.get('editedby').value, form.get('modificationdate').value,
+      form.get('status').value, form.get('description').value, form.get('profile').value);
+
+    return newLink;
+  }
+
 }

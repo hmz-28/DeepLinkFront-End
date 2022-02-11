@@ -19,7 +19,7 @@ export class SignUpComponent implements OnInit {
       {type: 'required', message: 'Email is required.'},
       {type: 'required', message: 'please enter a valid email address.'}
     ],
-
+    company: [],
     'password': [
       {type: 'required', message: 'password is required.'},
       {type: 'minlength', message: 'Password must be at least 6 characters.'},
@@ -90,7 +90,7 @@ export class SignUpComponent implements OnInit {
   }
 
   // convenience getter for easy access to form fields
-  get f() {
+  get form_fields() {
     return this.signupForm.controls;
   }
 

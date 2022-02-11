@@ -1,0 +1,61 @@
+<h2>
+  Deep Link Variables
+</h2>
+<div class="mat-elevation-z8">
+  <form [formGroup]="userTable">
+    <div class="action-container">
+      <button mat-raised-button type="submit" (click)="addRow()" color="primary">Add row</button>
+      <button mat-raised-button color="accent" style="float: right;" [disabled]="userTable.invalid" type="submit"
+              (click)="submitForm()">Submit
+      </button>
+    </div>
+    <table class="table table-border">
+      <thead class="text-nowrap">
+      <th>Variable Name <span class="ui-column-resizer"> </span></th>
+   <!--   <th>Variable Value<span class="ui-column-resizer"> </span></th>
+-->
+      <th></th>
+      </thead>
+      <tbody>
+      <ng-container formArrayName="tableRows" *ngFor="let group of getFormControls.controls ; let i=index">
+        <tr *ngIf="group.get('isEditable').value" [formGroupName]="i">
+          <td>
+            <mat-form-field class="full-width-field">
+              <input matInput type="text" formControlName="name">
+            </mat-form-field>
+
+          </td>
+      <!--    <td>
+            <mat-form-field class="fullwidth">
+              <input matInput type="tetx" formControlName="email">
+            </mat-form-field>
+          </td>-->
+
+          <td>
+            <mat-icon class="delete" (click)="deleteRow(i)">delete_forever</mat-icon>
+            <mat-icon class="done" (click)="doneRow(group)">done</mat-icon>
+          </td>
+        </tr>
+        <tr *ngIf="!group.get('isEditable').value">
+          <td>
+            {{group.get('name').value}}
+          </td>
+<!--          <td>
+            {{group.get('email').value}}
+          </td>-->
+
+          <td>
+            <mat-icon class="edit" (click)="editRow(group)">edit</mat-icon>
+          </td>
+        </tr>
+      </ng-container>
+      </tbody>
+    </table>
+
+  </form>
+</div>
+<div class="output">
+  <p>Form Data:  {{userTable.value | json}}</p>
+  <p>Is Valid: {{userTable.valid}}</p>
+</div>
+

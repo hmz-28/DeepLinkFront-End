@@ -6,7 +6,6 @@ import {AppComponent} from './app.component';
 import {UserProfileComponent} from './components/user-profile/user-profile.component';
 import {SignInComponent} from './components/sign-in/sign-in.component';
 
-
 import {AuthInterceptor} from './services/authconfig.interceptor';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {SignUpComponent} from './components/sign-up/sign-up.component';
@@ -22,6 +21,10 @@ import {NotfoundComponent} from './components/notfound/notfound.component';
 import {MatCardModule} from "@angular/material/card";
 
 import {DialoglinkComponent} from './components/dialoglink/dialoglink.component';
+import {SpinnerOverlayComponent} from './components/spinner-overlay/spinner-overlay.component';
+import {SpinnerInterceptor} from "./services/spinner.interceptor";
+import { AddVariablesComponent } from './components/add-variables/add-variables.component';
+
 
 @NgModule({
   declarations: [
@@ -34,7 +37,9 @@ import {DialoglinkComponent} from './components/dialoglink/dialoglink.component'
     DashboardComponent,
     ConfirmationDialogComponent,
     NotfoundComponent,
-    DialoglinkComponent
+    DialoglinkComponent,
+    SpinnerOverlayComponent,
+    AddVariablesComponent
   ],
   imports: [
     BrowserModule,
@@ -47,7 +52,13 @@ import {DialoglinkComponent} from './components/dialoglink/dialoglink.component'
     MatCardModule
   ],
   providers: [
-    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}
+
+    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: SpinnerInterceptor,
+      multi: true,
+    }
   ],
   bootstrap: [AppComponent]
 })

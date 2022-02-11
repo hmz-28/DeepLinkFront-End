@@ -118,7 +118,7 @@ export class ShowDeeplinkComponent implements OnInit {
     //  this.dataSource = new MatTableDataSource<PeriodicElement>(this.dataSource.data);
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       width: '350px',
-      data: "Do you confirm the deletion of this data?"
+      data: "Do you confirm the deletion of this link?"
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -141,6 +141,7 @@ export class ShowDeeplinkComponent implements OnInit {
   createFilter(): (data: any, filter: string) => boolean {
     let filterFunction = function (data, filter): boolean {
       let searchTerms = JSON.parse(filter);
+     // console.log(data);
       return data.linkname.toLowerCase().indexOf(searchTerms.linkname) !== -1
         && data.description.toString().toLowerCase().indexOf(searchTerms.description) !== -1
         && data.customer.toString().toLowerCase().indexOf(searchTerms.customer) !== -1

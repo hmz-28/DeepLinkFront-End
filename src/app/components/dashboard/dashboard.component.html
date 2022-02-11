@@ -1,7 +1,47 @@
 <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
 
+<!--
+<nav class="mat-elevation-z5 navbar  justify-content-end" style="background-color: #1f6b9e;">
 
-<mat-toolbar class="mat-elevation-z5">
+  <a routerLink="./add-deeplink">
+    <i class="fa fa-plus"></i>
+    <span>Generate DeepLink</span>
+
+  </a>
+
+  <a routerLink="./show-deeplink">
+    <i class="fa fa-list"></i>
+    <span>Show DeepLink</span>
+  </a>
+
+  <a routerLink="./user-profile">
+    <i class="fa fa-user"></i>
+    <span>Profile</span>
+
+  </a>
+  <a style="cursor:pointer;">
+    <span class="nav-icon"><i class="fa fa-power-off" aria-hidden="true"></i></span>
+    <span class="remove_text" (click)="signOut()">Logout</span> </a>
+</nav>-->
+
+<!--<div style="background: #eee8e8; ">
+  <mat-toolbar class="mat-elevation-z5" style="background-color: #1f6b9e;">
+    <a style="color: white; text-decoration:none" target="_blank" href="https:www.devconquer.com">DevConquer</a>
+    <div style="float:right">
+      <button mat-icon-button [mat-menu-trigger-for]="menu" layout-align="end">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+    </div>
+  </mat-toolbar>
+  <mat-menu x-position="before" #menu="matMenu">
+    <button mat-menu-item>Profile</button>
+    <button mat-menu-item>Logout</button>
+  </mat-menu>
+
+
+</div>-->
+
+<mat-toolbar class="mat-elevation-z5" style="background-color: #1f6b9e; position: fixed;">
   <button mat-button id="show-sidebar" class="btn btn-sm btn-white">
     <i class="fas fa-bars"></i>
   </button>
@@ -20,7 +60,7 @@
       <div class="sidebar-brand" id="close-sidebar">
         <a>Menu</a>
         <div>
-          <i class="fas fa-times"  (click)="openClose()"></i>
+          <i class="fas fa-times" (click)="openClose()"></i>
         </div>
       </div>
       <div class="sidebar-header">
@@ -60,7 +100,7 @@
           </li>
           <li class="sidebar-dropdown">
             <a routerLink="./add-deeplink">
-              <i class="fa fa-gem"></i>
+              <i class="fa fa-plus"></i>
               <span>Generate DeepLink</span>
               <!--  <span class="badge badge-pill badge-warning">New</span> -->
             </a>
@@ -68,8 +108,16 @@
           </li>
           <li class="sidebar-dropdown">
             <a routerLink="./show-deeplink">
-              <i class="fa fa-shopping-cart"></i>
+              <i class="fa fa-list"></i>
               <span>Show DeepLink</span>
+              <!--   <span class="badge badge-pill badge-danger">3</span> -->
+            </a>
+
+          </li>
+          <li class="sidebar-dropdown">
+            <a routerLink="./add-variables">
+              <i class="fa fa-table"></i>
+              <span>DeepLink Vars</span>
               <!--   <span class="badge badge-pill badge-danger">3</span> -->
             </a>
 

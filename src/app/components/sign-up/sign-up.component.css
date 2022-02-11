@@ -1,7 +1,8 @@
 div.main{
-    background: #43cea2;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to left, #185a9d, #43cea2);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to left, #185a9d, #43cea2);
+/*    background: #43cea2;  !* fallback for old browsers *!
+    background: -webkit-linear-gradient(to left, #185a9d, #43cea2);  !* Chrome 10-25, Safari 5.1-6 *!
+    background: linear-gradient(to left, #185a9d, #43cea2);*/
+  background-color:#ebedef;
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0264d6', endColorstr='#1c2b5a',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 height:100vh;
 width:100%;
@@ -12,7 +13,7 @@ width:100%;
     box-shadow: none;
 }
 .form-control:focus {
-    border-color: #5cb85c;
+    border-color: #1f6b9e;
 }
 .form-control, .btn {
     border-radius: 50px;
@@ -31,8 +32,8 @@ width:100%;
     padding: 40px;
 }
 .signup-form a {
-    color: #5cb85c;
-}    
+  background-color: #ffffff;
+}
 .signup-form h2 {
     text-align: center;
     font-size: 34px;
@@ -46,7 +47,7 @@ width:100%;
 .signup-form .form-group {
     margin-bottom: 20px;
 }
-.signup-form .btn {        
+.signup-form .btn {
     font-size: 18px;
     line-height: 26px;
     font-weight: bold;
@@ -54,11 +55,11 @@ width:100%;
 }
 .signup-btn {
     text-align: center;
-    border-color: #5cb85c;
+    color: #1f6b9e;
     transition: all 0.4s;
 }
 .signup-btn:hover {
-    background: #5cb85c;
+    background: #1f6b9e;
     opacity: 0.8;
 }
 .or-seperator {
@@ -89,7 +90,7 @@ width:100%;
     font-weight: normal;
     border: none;
     transition: all 0.4s;
-}	
+}
 .social-btn .btn:first-child {
     margin-left: 0;
 }
@@ -119,3 +120,9 @@ p {
   input.ng-touched.ng-invalid {
     border: 1px solid red;
   }
+.btn-success{
+  background-color: #1f6b9e;
+}
+.btn-light{
+  color: #1f6b9e;
+}

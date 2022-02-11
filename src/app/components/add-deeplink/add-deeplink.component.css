@@ -1,8 +1,8 @@
 
 h2 {
-    background: #43cea2;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to left, #185a9d, #43cea2);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to left, #185a9d, #43cea2);
+    background: rgb(0, 182, 240);  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to left, #185a9d,  rgb(0, 182, 240));  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to left, #185a9d,  rgb(0, 182, 240));
     color: #fff;
     overflow: auto;
     position: sticky;

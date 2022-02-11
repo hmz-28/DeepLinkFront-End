@@ -10,6 +10,7 @@ import {UserProfileComponent} from './components/user-profile/user-profile.compo
 import {AuthGuard} from "./shared/auth.guard";
 import {DashboardComponent} from 'src/app/components/dashboard/dashboard.component';
 import {NotfoundComponent} from "./components/notfound/notfound.component";
+import {AddVariablesComponent} from "./components/add-variables/add-variables.component";
 
 
 const routes: Routes = [
@@ -20,9 +21,10 @@ const routes: Routes = [
   {
     path: 'dashboard', component: DashboardComponent,
     children: [
-      {path: 'add-deeplink', component: AddDeeplinkComponent},
+      {path: 'add-deeplink', component: AddDeeplinkComponent, canActivate: [AuthGuard]},
       {path: 'user-profile', component: UserProfileComponent, canActivate: [AuthGuard]},
-      {path: 'show-deeplink', component: ShowDeeplinkComponent, canActivate: [AuthGuard]}
+      {path: 'show-deeplink', component: ShowDeeplinkComponent, canActivate: [AuthGuard]},
+      {path: 'add-variables', component: AddVariablesComponent, canActivate: [AuthGuard]},
     ]
   }, {path: '404', component: NotfoundComponent},
   {path: '**', redirectTo: '/404'}];

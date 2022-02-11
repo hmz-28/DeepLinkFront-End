@@ -19,7 +19,7 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatSnackBarModule} from "@angular/material/snack-bar";
-
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [],
@@ -43,7 +43,8 @@ import {MatSnackBarModule} from "@angular/material/snack-bar";
     MatSelectModule,
     BrowserAnimationsModule,
     MatTooltipModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatProgressSpinnerModule
   ],
   exports: [
     MatTabsModule,
@@ -64,7 +65,8 @@ import {MatSnackBarModule} from "@angular/material/snack-bar";
     MatSelectModule,
     BrowserAnimationsModule,
     MatTooltipModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatProgressSpinnerModule
   ]
 })
 export class MaterialModule {

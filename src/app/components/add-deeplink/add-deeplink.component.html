@@ -4,7 +4,7 @@
   <form [formGroup]="userTable">
     <div class="action-container">
 
-      <button mat-raised-button *ngIf="!isSubmit" [disabled]="!userTable.dirty" color="accent"
+      <button mat-raised-button *ngIf="!isSubmit" [disabled]="!userTable.dirty || userTable.untouched" color="accent"
               (click)="redirectToUpdate(userTable)"> Update
       </button>
       <button *ngIf="isSubmit" style="float:right;" mat-raised-button color="accent"
@@ -16,7 +16,7 @@
       <div class="col-lg-4">
         <mat-form-field class="fullwidth form-element">
 
-          <input matInput type="text" value="" placeholder="Link Name" formControlName="linkname">
+          <input matInput type="text" placeholder="Link Name" formControlName="linkname">
         </mat-form-field>
       </div>
       <div class="col-lg-4">
@@ -30,7 +30,7 @@
       <div class="col-lg-4">
         <mat-form-field class="fullwidth form-element">
 
-          <input matInput type="text" value="" placeholder="Link Description" formControlName="description">
+          <input matInput type="text" placeholder="Link Description" formControlName="description">
         </mat-form-field>
       </div>
     </div>
@@ -38,7 +38,6 @@
 
       <div class="col-lg-4">
         <mat-form-field class="fullwidth">
-
           <input matInput type="text" placeholder="Customer" formControlName="customer">
         </mat-form-field>
       </div>
@@ -54,8 +53,7 @@
       </div>
       <div class="col-lg-4">
         <mat-form-field class="fullwidth">
-
-          <input matInput type="text" placeholder="Edited by" value="" formControlName="editedby">
+          <input matInput type="text" placeholder="Edited by" formControlName="editedby">
         </mat-form-field>
       </div>
     </div>
@@ -64,7 +62,7 @@
       <div class="col-lg-4">
 
         <mat-form-field class="fullwidth">
-          <input  matInput [matDatepicker]="picker" placeholder="Modification date"
+          <input matInput [matDatepicker]="picker" placeholder="Modification date"
                  formControlName="modificationdate">
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>

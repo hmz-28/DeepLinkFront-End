@@ -1,14 +1,16 @@
 <mat-dialog-content class="md-dialog-container">
 
   <mat-dialog-actions align="end">
-  <button  (click)="copyText(linkvalue)" class="btn-copy-code btn btn-outline-grey btn-sm px-2 waves-effect" matTooltip="Copy link" style="z-index: 100">
-    <i class="fa fa-copy mr-1"></i>
-  </button>
+    <button (click)="copyText(linkvalue)" class="btn-copy-code btn btn-outline-grey btn-sm px-2 waves-effect"
+            matTooltip="Copy link" style="z-index: 100">
+      <i class="fa fa-copy mr-1"></i>
+    </button>
     <br>
     <br>
     <br>
   </mat-dialog-actions>
-  <textarea class="form-control" rows="8" cols="80" [(ngModel)]="linkvalue" matInput placeholder="Deep Link Value" readonly></textarea>
+  <textarea class="form-control" rows="8" cols="80" [(ngModel)]="linkvalue" matInput placeholder="Deep Link Value"
+            readonly></textarea>
 
 </mat-dialog-content>
 

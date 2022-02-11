@@ -129,5 +129,8 @@
       }
     }
   },
-  "defaultProject": "DeepLinkFront-End"
+  "defaultProject": "DeepLinkFront-End",
+  "cli": {
+    "analytics": "cbd06eb2-349b-43f7-a452-6b3368e14b32"
+  }
 }
